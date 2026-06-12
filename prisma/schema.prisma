@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  image     String?
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String
+  tags        String[]
+  demoUrl     String?
+  githubUrl   String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       String
+  currency    String   @default("TK")
+  period      String?
+  features    String[]
+  popular     Boolean  @default(false)
+  gradient    String   @default("from-purple-500 to-blue-500")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String
+  content   String
+  image     String
+  author    String
+  tags      String[]
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  company   String
+  content   String
+  avatar    String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+}
+
+model Technology {
+  id        String   @id @default(cuid())
+  name      String
+  icon      String   @default("code")
+  category  String   @default("Frontend")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentOrder {
+  id          String   @id @default(cuid())
+  orderCode   String   @unique
+
+  fullName          String
+  profileImage      String?
+  address           String?
+  email             String
+  phone             String?
+
+  githubUrl         String?
+  linkedinUrl       String?
+
+  degree            String?
+  institution       String?
+  educationStartDate String?
+  educationEndDate  String?
+
+  company           String?
+  position          String?
+  duration          String?
+  experienceDescription String?
+
+  skills            String[]
+  activities        String[]
+
+  additionalNotes   String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  awards       StudentAward[]
+  certificates StudentCertificate[]
+  research     StudentResearch[]
+}
+
+model StudentAward {
+  id        String   @id @default(cuid())
+  name      String
+  date      String?
+  image     String?
+  orderId   String
+  order     StudentOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model StudentCertificate {
+  id        String   @id @default(cuid())
+  name      String
+  date      String?
+  file      String?
+  orderId   String
+  order     StudentOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model StudentResearch {
+  id             String   @id @default(cuid())
+  title          String
+  role           String?
+  date           String?
+  conference     String?
+  publicationUrl String?
+  orderId        String
+  order          StudentOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+}
+
+model BusinessOrder {
+  id          String   @id @default(cuid())
+  orderCode   String   @unique
+
+  businessName          String
+  ownerName             String
+  email                 String
+  phone                 String?
+  address               String?
+  businessType          String?
+  productCategories     String?
+  websiteFeatures       String?
+  preferredDomain       String?
+  designStyle           String?
+  socialLinks           String?
+  additionalNotes       String?
+  logoUpload            String?
+  businessImages        String[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HeroContent {
+  id        String   @id @default(cuid())
+  badge     String   @default("Modern Web Solutions for Everyone")
+  title     String   @default("Build Your Digital Future")
+  subtitle  String   @default("Modern Web Solutions for Students, Professionals and Businesses.")
+  ctaText   String   @default("Get Started")
+  ctaLink   String   @default("/contact")
+  cta2Text  String   @default("View Projects")
+  cta2Link  String   @default("/#projects")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SEOSettings {
+  id        String   @id @default(cuid())
+  siteName  String   @default("Devzfy")
+  tagline   String   @default("Modern Web Solutions")
+  description String @default("Next-gen web development agency crafting futuristic digital experiences with cutting-edge technology.")
+  keywords  String[] @default(["web development", "web design", "agency", "next.js", "react", "digital solutions"])
+  ogImage   String?
+  twitterHandle String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
