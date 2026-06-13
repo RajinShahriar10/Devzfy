@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { GlassCard } from "@/components/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,9 @@ export default function AdminProjects() {
   const [tagInput, setTagInput] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const formRef = useRef(form);
+  formRef.current = form;
+
   const fetchProjects = useCallback(async () => {
     try {
       const res = await fetch("/api/projects");
@@ -64,18 +67,21 @@ export default function AdminProjects() {
   useEffect(() => { fetchProjects(); }, [fetchProjects]);
 
   function updateForm(updates: Partial<ReturnType<typeof emptyProject> | Project>) {
-    setForm({ ...form, ...updates });
+    setForm((prev) => ({ ...prev, ...updates }));
   }
 
   function addTag() {
     const tag = tagInput.trim();
-    if (!tag || form.tags.includes(tag)) { setTagInput(""); return; }
-    setForm({ ...form, tags: [...form.tags, tag] });
+    if (!tag) { setTagInput(""); return; }
+    setForm((prev) => {
+      if (prev.tags.includes(tag)) return prev;
+      return { ...prev, tags: [...prev.tags, tag] };
+    });
     setTagInput("");
   }
 
   function removeTag(tag: string) {
-    setForm({ ...form, tags: form.tags.filter((t) => t !== tag) });
+    setForm((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }));
   }
 
   function openAdd() {
@@ -93,29 +99,34 @@ export default function AdminProjects() {
     setForm(emptyProject());
   }
 
-  const isEditing = "id" in form && form.id !== "";
-
   async function saveProject() {
-    if (!form.title || !form.description) return;
+    const current = formRef.current;
+    const editing = "id" in current && current.id !== "";
+    if (!current.title || !current.description) {
+      alert("Title and description are required.");
+      return;
+    }
     setSaving(true);
     try {
       const body = {
-        title: form.title,
-        description: form.description,
-        image: form.image,
-        tags: form.tags,
-        demoUrl: form.demoUrl || null,
-        githubUrl: form.githubUrl || null,
+        title: current.title,
+        description: current.description,
+        image: current.image,
+        tags: current.tags,
+        demoUrl: current.demoUrl || null,
+        githubUrl: current.githubUrl || null,
       };
 
-      if (isEditing) {
-        const res = await fetch(`/api/projects/${form.id}`, {
+      console.log("Saving project:", body);
+
+      if (editing) {
+        const res = await fetch(`/api/projects/${current.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
         const data = await res.json();
-        if (!data.success) throw new Error(data.error);
+        if (!data.success) throw new Error(data.error || "Update failed");
       } else {
         const res = await fetch("/api/projects", {
           method: "POST",
@@ -123,13 +134,13 @@ export default function AdminProjects() {
           body: JSON.stringify(body),
         });
         const data = await res.json();
-        if (!data.success) throw new Error(data.error);
+        if (!data.success) throw new Error(data.error || "Create failed");
       }
       await fetchProjects();
       closeForm();
     } catch (err) {
       console.error("Save error:", err);
-      alert("Failed to save project");
+      alert("Failed to save project: " + (err instanceof Error ? err.message : String(err)));
     } finally {
       setSaving(false);
     }
@@ -184,7 +195,7 @@ export default function AdminProjects() {
             <GlassCard hover={false}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold">
-                  {isEditing ? "Edit Project" : "Add Project"}
+                  {"id" in form && form.id !== "" ? "Edit Project" : "Add Project"}
                 </h2>
                 <button onClick={closeForm} className="p-1 text-gray-400 hover:text-white">
                   <X className="h-5 w-5" />
@@ -286,7 +297,7 @@ export default function AdminProjects() {
                     {saving ? (
                       <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Saving...</>
                     ) : (
-                      <><Save className="h-4 w-4 mr-2" /> {isEditing ? "Update Project" : "Create Project"}</>
+                      <><Save className="h-4 w-4 mr-2" /> {"id" in form && form.id !== "" ? "Update Project" : "Create Project"}</>
                     )}
                   </Button>
                   <Button variant="secondary" onClick={closeForm}>
