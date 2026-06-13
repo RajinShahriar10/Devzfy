@@ -30,20 +30,22 @@ const gradients = [
   "bg-gradient-to-br from-pink-600 to-purple-600",
 ];
 
-const emptyForm: Omit<Project, "id"> & { tags: string[] } = {
-  title: "",
-  description: "",
-  image: gradients[0],
-  tags: [],
-  demoUrl: "",
-  githubUrl: "",
-};
+function emptyProject(): Omit<Project, "id"> & { tags: string[] } {
+  return {
+    title: "",
+    description: "",
+    image: gradients[0],
+    tags: [],
+    demoUrl: "",
+    githubUrl: "",
+  };
+}
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState<Project | null>(null);
-  const [isAdding, setIsAdding] = useState(false);
+  const [form, setForm] = useState<ReturnType<typeof emptyProject> | Project>(emptyProject());
+  const [showForm, setShowForm] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -61,34 +63,39 @@ export default function AdminProjects() {
 
   useEffect(() => { fetchProjects(); }, [fetchProjects]);
 
-  function getForm() {
-    return editing || emptyForm;
-  }
-
-  function setForm(updates: Partial<Project & { tags: string[] }>) {
-    if (editing) {
-      setEditing({ ...editing, ...updates });
-    }
+  function updateForm(updates: Partial<ReturnType<typeof emptyProject> | Project>) {
+    setForm({ ...form, ...updates });
   }
 
   function addTag() {
     const tag = tagInput.trim();
-    if (!tag) return;
-    const current = getForm();
-    if (current.tags.includes(tag)) { setTagInput(""); return; }
-    const next = [...current.tags, tag];
-    if (editing) setEditing({ ...editing, tags: next });
+    if (!tag || form.tags.includes(tag)) { setTagInput(""); return; }
+    setForm({ ...form, tags: [...form.tags, tag] });
     setTagInput("");
   }
 
   function removeTag(tag: string) {
-    if (editing) {
-      setEditing({ ...editing, tags: editing.tags.filter((t) => t !== tag) });
-    }
+    setForm({ ...form, tags: form.tags.filter((t) => t !== tag) });
   }
 
+  function openAdd() {
+    setForm(emptyProject());
+    setShowForm(true);
+  }
+
+  function openEdit(project: Project) {
+    setForm(project);
+    setShowForm(true);
+  }
+
+  function closeForm() {
+    setShowForm(false);
+    setForm(emptyProject());
+  }
+
+  const isEditing = "id" in form && form.id !== "";
+
   async function saveProject() {
-    const form = getForm();
     if (!form.title || !form.description) return;
     setSaving(true);
     try {
@@ -101,8 +108,8 @@ export default function AdminProjects() {
         githubUrl: form.githubUrl || null,
       };
 
-      if (editing) {
-        const res = await fetch(`/api/projects/${editing.id}`, {
+      if (isEditing) {
+        const res = await fetch(`/api/projects/${form.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -119,8 +126,7 @@ export default function AdminProjects() {
         if (!data.success) throw new Error(data.error);
       }
       await fetchProjects();
-      setEditing(null);
-      setIsAdding(false);
+      closeForm();
     } catch (err) {
       console.error("Save error:", err);
       alert("Failed to save project");
@@ -145,8 +151,6 @@ export default function AdminProjects() {
     return title.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   }
 
-  const form = getForm();
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -164,14 +168,14 @@ export default function AdminProjects() {
             Manage your portfolio projects. Only admin-added projects appear on the home page.
           </p>
         </div>
-        <Button onClick={() => { setEditing(null); setIsAdding(true); }}>
+        <Button onClick={openAdd}>
           <Plus className="h-4 w-4 mr-2" />
           Add Project
         </Button>
       </div>
 
       <AnimatePresence>
-        {(isAdding || editing) && (
+        {showForm && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -180,12 +184,9 @@ export default function AdminProjects() {
             <GlassCard hover={false}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold">
-                  {editing ? "Edit Project" : "Add Project"}
+                  {isEditing ? "Edit Project" : "Add Project"}
                 </h2>
-                <button
-                  onClick={() => { setEditing(null); setIsAdding(false); }}
-                  className="p-1 text-gray-400 hover:text-white"
-                >
+                <button onClick={closeForm} className="p-1 text-gray-400 hover:text-white">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -195,7 +196,7 @@ export default function AdminProjects() {
                   <label className="text-sm text-gray-400 mb-1 block">Project Title *</label>
                   <Input
                     value={form.title}
-                    onChange={(e) => setForm({ title: e.target.value })}
+                    onChange={(e) => updateForm({ title: e.target.value })}
                     placeholder="Enter project name"
                   />
                 </div>
@@ -204,7 +205,7 @@ export default function AdminProjects() {
                   <label className="text-sm text-gray-400 mb-1 block">Description *</label>
                   <Textarea
                     value={form.description}
-                    onChange={(e) => setForm({ description: e.target.value })}
+                    onChange={(e) => updateForm({ description: e.target.value })}
                     placeholder="Describe the project"
                   />
                 </div>
@@ -216,7 +217,7 @@ export default function AdminProjects() {
                       <button
                         key={g}
                         type="button"
-                        onClick={() => setForm({ image: g })}
+                        onClick={() => updateForm({ image: g })}
                         className={`h-8 w-8 rounded-full ${g} border-2 transition-all ${
                           form.image === g ? "border-white scale-110" : "border-transparent"
                         }`}
@@ -225,7 +226,7 @@ export default function AdminProjects() {
                   </div>
                   <Input
                     value={form.image}
-                    onChange={(e) => setForm({ image: e.target.value })}
+                    onChange={(e) => updateForm({ image: e.target.value })}
                     placeholder="Or enter a custom gradient class or image URL"
                     className="text-sm"
                   />
@@ -245,7 +246,7 @@ export default function AdminProjects() {
                     </Button>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {(form.tags || []).map((tag) => (
+                    {form.tags.map((tag) => (
                       <Badge key={tag} variant="secondary" className="gap-1">
                         {tag}
                         <button onClick={() => removeTag(tag)} className="hover:text-red-400">
@@ -253,7 +254,7 @@ export default function AdminProjects() {
                         </button>
                       </Badge>
                     ))}
-                    {(form.tags || []).length === 0 && (
+                    {form.tags.length === 0 && (
                       <span className="text-xs text-gray-500">No tags added</span>
                     )}
                   </div>
@@ -264,7 +265,7 @@ export default function AdminProjects() {
                     <label className="text-sm text-gray-400 mb-1 block">Live Demo URL</label>
                     <Input
                       value={form.demoUrl || ""}
-                      onChange={(e) => setForm({ demoUrl: e.target.value })}
+                      onChange={(e) => updateForm({ demoUrl: e.target.value })}
                       placeholder="https://example.com"
                       type="url"
                     />
@@ -273,7 +274,7 @@ export default function AdminProjects() {
                     <label className="text-sm text-gray-400 mb-1 block">GitHub URL</label>
                     <Input
                       value={form.githubUrl || ""}
-                      onChange={(e) => setForm({ githubUrl: e.target.value })}
+                      onChange={(e) => updateForm({ githubUrl: e.target.value })}
                       placeholder="https://github.com/..."
                       type="url"
                     />
@@ -285,10 +286,10 @@ export default function AdminProjects() {
                     {saving ? (
                       <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Saving...</>
                     ) : (
-                      <><Save className="h-4 w-4 mr-2" /> {editing ? "Update Project" : "Create Project"}</>
+                      <><Save className="h-4 w-4 mr-2" /> {isEditing ? "Update Project" : "Create Project"}</>
                     )}
                   </Button>
-                  <Button variant="secondary" onClick={() => { setEditing(null); setIsAdding(false); }}>
+                  <Button variant="secondary" onClick={closeForm}>
                     Cancel
                   </Button>
                 </div>
@@ -343,7 +344,7 @@ export default function AdminProjects() {
               </div>
               <div className="flex items-center gap-2 shrink-0 ml-4">
                 <button
-                  onClick={() => { setEditing(project); setIsAdding(true); }}
+                  onClick={() => openEdit(project)}
                   className="p-2 text-gray-400 hover:text-purple-400 transition-colors"
                 >
                   <Pencil className="h-4 w-4" />
