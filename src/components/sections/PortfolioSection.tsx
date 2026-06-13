@@ -2,72 +2,53 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import Link from "next/link";
 
-const projects = [
-  {
-    title: "Nexus Dashboard",
-    description: "A real-time analytics dashboard for enterprise data visualization and monitoring.",
-    tags: ["Next.js", "TypeScript", "PostgreSQL", "WebSocket"],
-    image: "bg-gradient-to-br from-purple-600 to-blue-600",
-    demoUrl: "https://example.com/nexus",
-    initials: "ND",
-  },
-  {
-    title: "SwiftCart",
-    description: "High-performance e-commerce platform with AI-powered recommendations.",
-    tags: ["React", "Node.js", "Redis", "Machine Learning"],
-    image: "bg-gradient-to-br from-blue-600 to-cyan-600",
-    demoUrl: "https://example.com/swiftcart",
-    initials: "SC",
-  },
-  {
-    title: "CloudForge",
-    description: "Cloud infrastructure management platform with real-time monitoring and deployment.",
-    tags: ["Next.js", "Go", "Docker", "AWS"],
-    image: "bg-gradient-to-br from-cyan-600 to-teal-600",
-    demoUrl: "https://example.com/cloudforge",
-    initials: "CF",
-  },
-  {
-    title: "HealthTrack",
-    description: "A comprehensive health monitoring app with wearable device integration.",
-    tags: ["React Native", "Python", "MongoDB", "WebSocket"],
-    image: "bg-gradient-to-br from-emerald-600 to-teal-600",
-    demoUrl: "https://example.com/healthtrack",
-    initials: "HT",
-  },
-];
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  demoUrl: string | null;
+  githubUrl: string | null;
+}
+
+function initials(title: string) {
+  return title.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase();
+}
 
 const slideVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
-    opacity: 0,
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-  },
-  exit: (direction: number) => ({
-    x: direction < 0 ? 300 : -300,
-    opacity: 0,
-  }),
+  enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (direction: number) => ({ x: direction < 0 ? 300 : -300, opacity: 0 }),
 };
 
 export function PortfolioSection() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const [[current, direction], setCurrent] = useState([0, 0]);
   const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
   const touchStart = useRef<number>(0);
   const touchEnd = useRef<number>(0);
 
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((r) => r.json())
+      .then((data) => setProjects(data.projects || []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
   const total = projects.length;
 
   const goTo = useCallback(
     (index: number) => {
+      if (total === 0) return;
       const dir = index > current ? 1 : -1;
       setCurrent([((index % total) + total) % total, dir]);
     },
@@ -78,18 +59,17 @@ export function PortfolioSection() {
   const prev = useCallback(() => goTo(current - 1), [current, goTo]);
 
   useEffect(() => {
+    if (total <= 1) return;
     intervalRef.current = setInterval(next, 4000);
     return () => clearInterval(intervalRef.current);
-  }, [next]);
+  }, [next, total]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStart.current = e.touches[0].clientX;
   };
-
   const handleTouchMove = (e: React.TouchEvent) => {
     touchEnd.current = e.touches[0].clientX;
   };
-
   const handleTouchEnd = () => {
     const diff = touchStart.current - touchEnd.current;
     if (Math.abs(diff) > 50) {
@@ -97,6 +77,22 @@ export function PortfolioSection() {
       else prev();
     }
   };
+
+  if (loading) {
+    return (
+      <section className="relative py-24 lg:py-32" id="projects">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (projects.length === 0) {
+    return null;
+  }
 
   const project = projects[current];
 
@@ -141,7 +137,7 @@ export function PortfolioSection() {
                       animate={{ scale: [1, 1.05, 1] }}
                       transition={{ duration: 4, repeat: Infinity }}
                     >
-                      {project.initials}
+                      {initials(project.title)}
                     </motion.span>
                   </div>
 
@@ -161,12 +157,14 @@ export function PortfolioSection() {
                       ))}
                     </div>
 
-                    <Link href={project.demoUrl} target="_blank">
-                      <Button className="group w-fit">
-                        Live Demo
-                        <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
+                    {project.demoUrl && (
+                      <Link href={project.demoUrl} target="_blank">
+                        <Button className="group w-fit">
+                          Live Demo
+                          <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 </div>
               </motion.div>

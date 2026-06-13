@@ -13,6 +13,51 @@ interface DynamicEntry {
   value: string;
 }
 
+interface EducationEntry {
+  id: string;
+  degree: string;
+  institution: string;
+  startDate: string;
+  endDate: string;
+}
+
+interface ExperienceEntry {
+  id: string;
+  company: string;
+  position: string;
+  duration: string;
+  description: string;
+}
+
+interface AwardEntry {
+  id: string;
+  name: string;
+  date: string;
+  image: string;
+}
+
+interface CertificateEntry {
+  id: string;
+  name: string;
+  date: string;
+  file: string;
+}
+
+interface ResearchEntry {
+  id: string;
+  title: string;
+  role: string;
+  date: string;
+  conference: string;
+  publicationUrl: string;
+}
+
+const emptyEducation = (): EducationEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), degree: "", institution: "", startDate: "", endDate: "" });
+const emptyExperience = (): ExperienceEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), company: "", position: "", duration: "", description: "" });
+const emptyAward = (): AwardEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", date: "", image: "" });
+const emptyCertificate = (): CertificateEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", date: "", file: "" });
+const emptyResearch = (): ResearchEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), title: "", role: "", date: "", conference: "", publicationUrl: "" });
+
 export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -20,19 +65,29 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
   const [orderCode, setOrderCode] = useState("");
   const [copied, setCopied] = useState(false);
 
+  const [fullName, setFullName] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [githubUrl, setGithubUrl] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [educations, setEducations] = useState<EducationEntry[]>([]);
+  const [experiences, setExperiences] = useState<ExperienceEntry[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
+  const [awards, setAwards] = useState<AwardEntry[]>([]);
   const [activities, setActivities] = useState<DynamicEntry[]>([]);
   const [activityInput, setActivityInput] = useState("");
-
-  const [profileImageData, setProfileImageData] = useState("");
-  const [awardImageData, setAwardImageData] = useState("");
-  const [certificateFileData, setCertificateFileData] = useState("");
+  const [certificates, setCertificates] = useState<CertificateEntry[]>([]);
+  const [research, setResearch] = useState<ResearchEntry[]>([]);
+  const [additionalNotes, setAdditionalNotes] = useState("");
 
   const totalSteps = 8;
 
   function addSkill() {
     if (!skillInput.trim()) return;
+    if (skills.includes(skillInput.trim())) { setSkillInput(""); return; }
     setSkills([...skills, skillInput.trim()]);
     setSkillInput("");
   }
@@ -51,6 +106,36 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
     setActivities(activities.filter((a) => a.id !== id));
   }
 
+  function addEducation() { setEducations([...educations, emptyEducation()]); }
+  function removeEducation(id: string) { setEducations(educations.filter((e) => e.id !== id)); }
+  function updateEducation(id: string, field: keyof EducationEntry, value: string) {
+    setEducations(educations.map((e) => e.id === id ? { ...e, [field]: value } : e));
+  }
+
+  function addExperience() { setExperiences([...experiences, emptyExperience()]); }
+  function removeExperience(id: string) { setExperiences(experiences.filter((e) => e.id !== id)); }
+  function updateExperience(id: string, field: keyof ExperienceEntry, value: string) {
+    setExperiences(experiences.map((e) => e.id === id ? { ...e, [field]: value } : e));
+  }
+
+  function addAward() { setAwards([...awards, emptyAward()]); }
+  function removeAward(id: string) { setAwards(awards.filter((a) => a.id !== id)); }
+  function updateAward(id: string, field: keyof AwardEntry, value: string) {
+    setAwards(awards.map((a) => a.id === id ? { ...a, [field]: value } : a));
+  }
+
+  function addCertificate() { setCertificates([...certificates, emptyCertificate()]); }
+  function removeCertificate(id: string) { setCertificates(certificates.filter((c) => c.id !== id)); }
+  function updateCertificate(id: string, field: keyof CertificateEntry, value: string) {
+    setCertificates(certificates.map((c) => c.id === id ? { ...c, [field]: value } : c));
+  }
+
+  function addResearch() { setResearch([...research, emptyResearch()]); }
+  function removeResearch(id: string) { setResearch(research.filter((r) => r.id !== id)); }
+  function updateResearch(id: string, field: keyof ResearchEntry, value: string) {
+    setResearch(research.map((r) => r.id === id ? { ...r, [field]: value } : r));
+  }
+
   function readFileAsDataURL(file: File): Promise<string> {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -59,23 +144,54 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
     });
   }
 
+  function handleFile(setter: (v: string) => void) {
+    return async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) setter(await readFileAsDataURL(file));
+    };
+  }
+
+  function handleAwardImage(id: string) {
+    return async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) updateAward(id, "image", await readFileAsDataURL(file));
+    };
+  }
+
+  function handleCertificateFile(id: string) {
+    return async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) updateCertificate(id, "file", await readFileAsDataURL(file));
+    };
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
 
-    const form = e.target as HTMLFormElement;
-    const fd = new FormData(form);
-
-    const payload: Record<string, unknown> = {};
-    for (const [key, val] of fd.entries()) {
-      if (val instanceof File) continue;
-      payload[key] = val;
-    }
-    payload.skills = skills;
-    payload.activities = activities.map((a) => a.value);
-    payload.profileImage = profileImageData || null;
-    payload.awardImage = awardImageData || null;
-    payload.certificateFile = certificateFileData || null;
+    const payload = {
+      fullName,
+      profileImage: profileImage || null,
+      address: address || null,
+      email,
+      phone: phone || null,
+      githubUrl: githubUrl || null,
+      linkedinUrl: linkedinUrl || null,
+      skills,
+      activities: activities.map((a) => a.value),
+      additionalNotes: additionalNotes || null,
+      educations: educations.map(({ id, degree, institution, startDate, endDate }) => ({
+        degree, institution, educationStartDate: startDate, educationEndDate: endDate,
+      })),
+      experiences: experiences.map(({ id, company, position, duration, description }) => ({
+        company, position, duration, experienceDescription: description,
+      })),
+      awards: awards.map(({ id, name, date, image }) => ({ name, date: date || null, image: image || null })),
+      certificates: certificates.map(({ id, name, date, file }) => ({ name, date: date || null, file: file || null })),
+      research: research.map(({ id, title, role, date, conference, publicationUrl }) => ({
+        title, role: role || null, date: date || null, conference: conference || null, publicationUrl: publicationUrl || null,
+      })),
+    };
 
     try {
       const res = await fetch("/api/orders/student", {
@@ -102,11 +218,21 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
     setSubmitted(false);
     setOrderCode("");
     setCopied(false);
+    setFullName("");
+    setProfileImage("");
+    setAddress("");
+    setEmail("");
+    setPhone("");
+    setGithubUrl("");
+    setLinkedinUrl("");
+    setEducations([]);
+    setExperiences([]);
     setSkills([]);
+    setAwards([]);
     setActivities([]);
-    setProfileImageData("");
-    setAwardImageData("");
-    setCertificateFileData("");
+    setCertificates([]);
+    setResearch([]);
+    setAdditionalNotes("");
     onClose();
   }
 
@@ -117,14 +243,6 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
   }
 
   const inputClass = "bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:ring-purple-500/50 focus:border-purple-500";
-
-  function handleFile(setter: (v: string) => void) {
-    return async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) setter(await readFileAsDataURL(file));
-    };
-  }
-
   const fileInputClass = "flex-1 file:bg-purple-500/20 file:border-0 file:text-white file:rounded-lg file:px-3 file:py-1 file:text-sm";
 
   function renderStep() {
@@ -136,32 +254,32 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 <label className="text-sm text-gray-400 mb-1 block">Full Name *</label>
-                <Input required name="fullName" className={inputClass} placeholder="Enter your full name" />
+                <Input required value={fullName} onChange={(e) => setFullName(e.target.value)} className={inputClass} placeholder="Enter your full name" />
               </div>
               <div className="sm:col-span-2">
                 <label className="text-sm text-gray-400 mb-1 block">Profile Image Upload</label>
                 <div className="flex items-center gap-3">
                   <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center overflow-hidden">
-                    {profileImageData ? (
-                      <img src={profileImageData} alt="" className="h-full w-full object-cover" />
+                    {profileImage ? (
+                      <img src={profileImage} alt="" className="h-full w-full object-cover" />
                     ) : (
                       <Upload className="h-5 w-5 text-purple-400" />
                     )}
                   </div>
-                  <Input type="file" accept="image/*" className={fileInputClass} onChange={handleFile(setProfileImageData)} />
+                  <Input type="file" accept="image/*" className={fileInputClass} onChange={handleFile(setProfileImage)} />
                 </div>
               </div>
               <div className="sm:col-span-2">
                 <label className="text-sm text-gray-400 mb-1 block">Address</label>
-                <Input name="address" className={inputClass} placeholder="Your address" />
+                <Input value={address} onChange={(e) => setAddress(e.target.value)} className={inputClass} placeholder="Your address" />
               </div>
               <div>
                 <label className="text-sm text-gray-400 mb-1 block">Email *</label>
-                <Input required type="email" name="email" className={inputClass} placeholder="your@email.com" />
+                <Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} placeholder="your@email.com" />
               </div>
               <div>
                 <label className="text-sm text-gray-400 mb-1 block">Phone</label>
-                <Input type="tel" name="phone" className={inputClass} placeholder="+880 1XXX-XXXXXX" />
+                <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="+880 1XXX-XXXXXX" />
               </div>
             </div>
           </div>
@@ -173,11 +291,11 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm text-gray-400 mb-1 block">GitHub URL</label>
-                <Input name="githubUrl" className={inputClass} placeholder="https://github.com/username" />
+                <Input value={githubUrl} onChange={(e) => setGithubUrl(e.target.value)} className={inputClass} placeholder="https://github.com/username" />
               </div>
               <div>
                 <label className="text-sm text-gray-400 mb-1 block">LinkedIn URL</label>
-                <Input name="linkedinUrl" className={inputClass} placeholder="https://linkedin.com/in/username" />
+                <Input value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} className={inputClass} placeholder="https://linkedin.com/in/username" />
               </div>
             </div>
           </div>
@@ -185,49 +303,85 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
       case 3:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gradient">Education</h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Degree *</label>
-                <Input required name="degree" className={inputClass} placeholder="e.g. B.Sc. in Computer Science" />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Institution *</label>
-                <Input required name="institution" className={inputClass} placeholder="University / College name" />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Start Date</label>
-                <Input type="date" name="educationStartDate" className={inputClass} />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">End Date</label>
-                <Input type="date" name="educationEndDate" className={inputClass} />
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gradient">Education</h3>
+              <Button type="button" variant="secondary" size="sm" onClick={addEducation}>
+                <Plus className="h-4 w-4 mr-1" /> Add Education
+              </Button>
             </div>
+            {educations.length === 0 && (
+              <p className="text-sm text-gray-500">No education entries. Click &quot;Add Education&quot; to add one.</p>
+            )}
+            {educations.map((edu, i) => (
+              <div key={edu.id} className="glass rounded-xl p-4 space-y-3 relative">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-purple-400">Education #{i + 1}</span>
+                  <button type="button" onClick={() => removeEducation(edu.id)} className="text-gray-400 hover:text-red-400">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Degree *</label>
+                    <Input required value={edu.degree} onChange={(e) => updateEducation(edu.id, "degree", e.target.value)} className={inputClass} placeholder="e.g. B.Sc. in Computer Science" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Institution *</label>
+                    <Input required value={edu.institution} onChange={(e) => updateEducation(edu.id, "institution", e.target.value)} className={inputClass} placeholder="University / College name" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Start Date</label>
+                    <Input type="date" value={edu.startDate} onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">End Date</label>
+                    <Input type="date" value={edu.endDate} onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)} className={inputClass} />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         );
       case 4:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gradient">Experience</h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Company</label>
-                <Input name="company" className={inputClass} placeholder="Company name" />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Position</label>
-                <Input name="position" className={inputClass} placeholder="Job title" />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Duration</label>
-                <Input name="duration" className={inputClass} placeholder="e.g. Jan 2024 - Present" />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Description</label>
-                <Textarea name="experienceDescription" className={inputClass} placeholder="Describe your responsibilities and achievements" />
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gradient">Experience</h3>
+              <Button type="button" variant="secondary" size="sm" onClick={addExperience}>
+                <Plus className="h-4 w-4 mr-1" /> Add Experience
+              </Button>
             </div>
+            {experiences.length === 0 && (
+              <p className="text-sm text-gray-500">No experience entries. Click &quot;Add Experience&quot; to add one.</p>
+            )}
+            {experiences.map((exp, i) => (
+              <div key={exp.id} className="glass rounded-xl p-4 space-y-3 relative">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-purple-400">Experience #{i + 1}</span>
+                  <button type="button" onClick={() => removeExperience(exp.id)} className="text-gray-400 hover:text-red-400">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Company</label>
+                    <Input value={exp.company} onChange={(e) => updateExperience(exp.id, "company", e.target.value)} className={inputClass} placeholder="Company name" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Position</label>
+                    <Input value={exp.position} onChange={(e) => updateExperience(exp.id, "position", e.target.value)} className={inputClass} placeholder="Job title" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Duration</label>
+                    <Input value={exp.duration} onChange={(e) => updateExperience(exp.id, "duration", e.target.value)} className={inputClass} placeholder="e.g. Jan 2024 - Present" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Description</label>
+                    <Textarea value={exp.description} onChange={(e) => updateExperience(exp.id, "description", e.target.value)} className={inputClass} placeholder="Describe your responsibilities" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         );
       case 5:
@@ -262,94 +416,158 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
         );
       case 6:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gradient">Awards</h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Award Name</label>
-                <Input name="awardName" className={inputClass} placeholder="Award title" />
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold text-gradient">Awards</h3>
+                <Button type="button" variant="secondary" size="sm" onClick={addAward}>
+                  <Plus className="h-4 w-4 mr-1" /> Add Award
+                </Button>
               </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Award Date</label>
-                <Input type="date" name="awardDate" className={inputClass} />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Award Image Upload</label>
-                <Input type="file" accept="image/*" className={fileInputClass} onChange={handleFile(setAwardImageData)} />
-              </div>
-            </div>
-
-            <hr className="border-white/10 my-4" />
-
-            <h4 className="font-semibold text-sm text-gray-300">Extracurricular Activities</h4>
-            <div className="flex gap-2">
-              <Input
-                value={activityInput}
-                onChange={(e) => setActivityInput(e.target.value)}
-                placeholder="Add an activity"
-                className={inputClass}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addActivity(); } }}
-              />
-              <Button variant="secondary" onClick={addActivity} type="button" className="shrink-0">
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="space-y-2">
-              {activities.map((a) => (
-                <div key={a.id} className="flex items-center justify-between glass rounded-lg px-3 py-2">
-                  <span className="text-sm">{a.value}</span>
-                  <button onClick={() => removeActivity(a.id)} className="text-gray-400 hover:text-red-400">
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+              {awards.length === 0 && (
+                <p className="text-sm text-gray-500">No awards added.</p>
+              )}
+              {awards.map((aw, i) => (
+                <div key={aw.id} className="glass rounded-xl p-4 space-y-3 relative mb-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-purple-400">Award #{i + 1}</span>
+                    <button type="button" onClick={() => removeAward(aw.id)} className="text-gray-400 hover:text-red-400">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Award Name</label>
+                      <Input value={aw.name} onChange={(e) => updateAward(aw.id, "name", e.target.value)} className={inputClass} placeholder="Award title" />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-400 mb-1 block">Award Date</label>
+                      <Input type="date" value={aw.date} onChange={(e) => updateAward(aw.id, "date", e.target.value)} className={inputClass} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-400 mb-1 block">Award Image</label>
+                      <Input type="file" accept="image/*" className={fileInputClass} onChange={handleAwardImage(aw.id)} />
+                      {aw.image && <span className="text-xs text-green-400 mt-1 block">Image uploaded</span>}
+                    </div>
+                  </div>
                 </div>
               ))}
-              {activities.length === 0 && <span className="text-xs text-gray-500">No activities added</span>}
+            </div>
+
+            <hr className="border-white/10" />
+
+            <div>
+              <h4 className="font-semibold text-sm text-gray-300 mb-2">Extracurricular Activities</h4>
+              <div className="flex gap-2 mb-2">
+                <Input
+                  value={activityInput}
+                  onChange={(e) => setActivityInput(e.target.value)}
+                  placeholder="Add an activity"
+                  className={inputClass}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addActivity(); } }}
+                />
+                <Button variant="secondary" onClick={addActivity} type="button" className="shrink-0">
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {activities.map((a) => (
+                  <div key={a.id} className="flex items-center justify-between glass rounded-lg px-3 py-2">
+                    <span className="text-sm">{a.value}</span>
+                    <button onClick={() => removeActivity(a.id)} className="text-gray-400 hover:text-red-400">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+                {activities.length === 0 && <span className="text-xs text-gray-500">No activities added</span>}
+              </div>
             </div>
           </div>
         );
       case 7:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gradient">Certificates</h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Certificate Name</label>
-                <Input name="certificateName" className={inputClass} placeholder="Certificate title" />
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold text-gradient">Certificates</h3>
+                <Button type="button" variant="secondary" size="sm" onClick={addCertificate}>
+                  <Plus className="h-4 w-4 mr-1" /> Add Certificate
+                </Button>
               </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Date</label>
-                <Input type="date" name="certificateDate" className={inputClass} />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Certificate Upload</label>
-                <Input type="file" accept="image/*,.pdf" className={fileInputClass} onChange={handleFile(setCertificateFileData)} />
-              </div>
+              {certificates.length === 0 && (
+                <p className="text-sm text-gray-500">No certificates added.</p>
+              )}
+              {certificates.map((cert, i) => (
+                <div key={cert.id} className="glass rounded-xl p-4 space-y-3 relative mb-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-purple-400">Certificate #{i + 1}</span>
+                    <button type="button" onClick={() => removeCertificate(cert.id)} className="text-gray-400 hover:text-red-400">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Certificate Name</label>
+                      <Input value={cert.name} onChange={(e) => updateCertificate(cert.id, "name", e.target.value)} className={inputClass} placeholder="Certificate title" />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-400 mb-1 block">Date</label>
+                      <Input type="date" value={cert.date} onChange={(e) => updateCertificate(cert.id, "date", e.target.value)} className={inputClass} />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-400 mb-1 block">File Upload</label>
+                      <Input type="file" accept="image/*,.pdf" className={fileInputClass} onChange={handleCertificateFile(cert.id)} />
+                      {cert.file && <span className="text-xs text-green-400 mt-1 block">File uploaded</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <hr className="border-white/10 my-4" />
+            <hr className="border-white/10" />
 
-            <h3 className="text-lg font-semibold text-gradient">Research</h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Title</label>
-                <Input name="researchTitle" className={inputClass} placeholder="Research paper title" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold text-gradient">Research</h3>
+                <Button type="button" variant="secondary" size="sm" onClick={addResearch}>
+                  <Plus className="h-4 w-4 mr-1" /> Add Research
+                </Button>
               </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Role</label>
-                <Input name="researchRole" className={inputClass} placeholder="e.g. Lead Researcher, Co-author" />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Date</label>
-                <Input type="date" name="researchDate" className={inputClass} />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Conference Name</label>
-                <Input name="conferenceName" className={inputClass} placeholder="Conference or journal name" />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400 mb-1 block">Publication Link (optional)</label>
-                <Input name="publicationLink" className={inputClass} placeholder="https://doi.org/..." />
-              </div>
+              {research.length === 0 && (
+                <p className="text-sm text-gray-500">No research entries.</p>
+              )}
+              {research.map((res, i) => (
+                <div key={res.id} className="glass rounded-xl p-4 space-y-3 relative mb-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-purple-400">Research #{i + 1}</span>
+                    <button type="button" onClick={() => removeResearch(res.id)} className="text-gray-400 hover:text-red-400">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Title</label>
+                      <Input value={res.title} onChange={(e) => updateResearch(res.id, "title", e.target.value)} className={inputClass} placeholder="Research paper title" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Role</label>
+                      <Input value={res.role} onChange={(e) => updateResearch(res.id, "role", e.target.value)} className={inputClass} placeholder="e.g. Lead Researcher, Co-author" />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-400 mb-1 block">Date</label>
+                      <Input type="date" value={res.date} onChange={(e) => updateResearch(res.id, "date", e.target.value)} className={inputClass} />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Conference Name</label>
+                      <Input value={res.conference} onChange={(e) => updateResearch(res.id, "conference", e.target.value)} className={inputClass} placeholder="Conference or journal name" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Publication Link</label>
+                      <Input value={res.publicationUrl} onChange={(e) => updateResearch(res.id, "publicationUrl", e.target.value)} className={inputClass} placeholder="https://doi.org/..." />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         );
@@ -358,7 +576,8 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gradient">Additional Notes</h3>
             <Textarea
-              name="additionalNotes"
+              value={additionalNotes}
+              onChange={(e) => setAdditionalNotes(e.target.value)}
               className={inputClass + " min-h-[120px]"}
               placeholder="Any additional information, special requirements, or messages..."
             />
@@ -400,15 +619,9 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
                 <div className="flex items-center justify-center gap-3">
                   <Button onClick={copyCode} variant={copied ? "default" : "outline"}>
                     {copied ? (
-                      <>
-                        <Check className="mr-2 h-4 w-4" />
-                        Copied!
-                      </>
+                      <><Check className="mr-2 h-4 w-4" /> Copied!</>
                     ) : (
-                      <>
-                        <Copy className="mr-2 h-4 w-4" />
-                        Copy
-                      </>
+                      <><Copy className="mr-2 h-4 w-4" /> Copy</>
                     )}
                   </Button>
                   <Button onClick={resetAndClose}>Close</Button>
@@ -428,14 +641,9 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
 
                 <div className="flex gap-1 mb-6">
                   {Array.from({ length: totalSteps }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={`h-1.5 flex-1 rounded-full transition-all ${
-                        i + 1 <= step
-                          ? "bg-gradient-to-r from-purple-500 to-blue-500"
-                          : "bg-white/10"
-                      }`}
-                    />
+                    <div key={i} className={`h-1.5 flex-1 rounded-full transition-all ${
+                      i + 1 <= step ? "bg-gradient-to-r from-purple-500 to-blue-500" : "bg-white/10"
+                    }`} />
                   ))}
                 </div>
 
@@ -455,15 +663,9 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
                     {step === totalSteps ? (
                       <Button type="submit" disabled={submitting}>
                         {submitting ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Submitting...
-                          </>
+                          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</>
                         ) : (
-                          <>
-                            <Send className="mr-2 h-4 w-4" />
-                            Submit Application
-                          </>
+                          <><Send className="mr-2 h-4 w-4" /> Submit Application</>
                         )}
                       </Button>
                     ) : (

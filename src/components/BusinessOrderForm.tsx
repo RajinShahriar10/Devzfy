@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 
 export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [submitting, setSubmitting] = useState(false);
@@ -15,6 +16,28 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
   const [orderCode, setOrderCode] = useState("");
   const [copied, setCopied] = useState(false);
 
+  const [businessName, setBusinessName] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [businessType, setBusinessType] = useState("");
+
+  const [productCategories, setProductCategories] = useState<string[]>([]);
+  const [categoryInput, setCategoryInput] = useState("");
+
+  const [websiteFeatures, setWebsiteFeatures] = useState<string[]>([]);
+  const [featureInput, setFeatureInput] = useState("");
+
+  const [preferredDomain, setPreferredDomain] = useState("");
+
+  const [designStyles, setDesignStyles] = useState<string[]>([]);
+  const [styleInput, setStyleInput] = useState("");
+
+  const [socialLinks, setSocialLinks] = useState<string[]>([]);
+  const [socialInput, setSocialInput] = useState("");
+
+  const [additionalNotes, setAdditionalNotes] = useState("");
   const [logoData, setLogoData] = useState("");
   const [businessImages, setBusinessImages] = useState<string[]>([]);
 
@@ -45,20 +68,37 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
     setBusinessImages(businessImages.filter((_, i) => i !== index));
   }
 
+  function addTag(list: string[], setter: (v: string[]) => void, input: string, setInput: (v: string) => void) {
+    const val = input.trim();
+    if (!val || list.includes(val)) return;
+    setter([...list, val]);
+    setInput("");
+  }
+
+  function removeTag(list: string[], setter: (v: string[]) => void, item: string) {
+    setter(list.filter((t) => t !== item));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
 
-    const form = e.target as HTMLFormElement;
-    const fd = new FormData(form);
-
-    const payload: Record<string, unknown> = {};
-    for (const [key, val] of fd.entries()) {
-      if (val instanceof File) continue;
-      payload[key] = val;
-    }
-    payload.logoUpload = logoData || null;
-    payload.businessImages = businessImages;
+    const payload = {
+      businessName,
+      ownerName,
+      email,
+      phone: phone || null,
+      address: address || null,
+      businessType: businessType || null,
+      productCategories: productCategories.join(", ") || null,
+      websiteFeatures: websiteFeatures.join(", ") || null,
+      preferredDomain: preferredDomain || null,
+      designStyle: designStyles.join(", ") || null,
+      socialLinks: socialLinks.join(", ") || null,
+      additionalNotes: additionalNotes || null,
+      logoUpload: logoData || null,
+      businessImages,
+    };
 
     try {
       const res = await fetch("/api/orders/business", {
@@ -84,6 +124,18 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
     setSubmitted(false);
     setOrderCode("");
     setCopied(false);
+    setBusinessName("");
+    setOwnerName("");
+    setEmail("");
+    setPhone("");
+    setAddress("");
+    setBusinessType("");
+    setProductCategories([]);
+    setWebsiteFeatures([]);
+    setPreferredDomain("");
+    setDesignStyles([]);
+    setSocialLinks([]);
+    setAdditionalNotes("");
     setLogoData("");
     setBusinessImages([]);
     onClose();
@@ -97,6 +149,42 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
 
   const inputClass = "bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:ring-cyan-500/50 focus:border-cyan-500";
   const fileClass = "file:bg-cyan-500/20 file:border-0 file:text-white file:rounded-lg file:px-3 file:py-1 file:text-sm";
+
+  function renderTagInput(
+    list: string[],
+    setter: (v: string[]) => void,
+    input: string,
+    setInput: (v: string) => void,
+    placeholder: string,
+  ) {
+    return (
+      <div>
+        <div className="flex gap-2 mb-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={placeholder}
+            className={inputClass}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(list, setter, input, setInput); } }}
+          />
+          <Button variant="secondary" type="button" onClick={() => addTag(list, setter, input, setInput)} className="shrink-0">
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {list.map((item) => (
+            <Badge key={item} variant="secondary" className="gap-1">
+              {item}
+              <button type="button" onClick={() => removeTag(list, setter, item)} className="hover:text-red-400">
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
+          {list.length === 0 && <span className="text-xs text-gray-500">None added</span>}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence>
@@ -157,33 +245,36 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="sm:col-span-2">
                         <label className="text-sm text-gray-400 mb-1 block">Business Name *</label>
-                        <Input required name="businessName" className={inputClass} placeholder="Your business name" />
+                        <Input required value={businessName} onChange={(e) => setBusinessName(e.target.value)} className={inputClass} placeholder="Your business name" />
                       </div>
                       <div>
                         <label className="text-sm text-gray-400 mb-1 block">Owner Name *</label>
-                        <Input required name="ownerName" className={inputClass} placeholder="Owner's full name" />
+                        <Input required value={ownerName} onChange={(e) => setOwnerName(e.target.value)} className={inputClass} placeholder="Owner's full name" />
                       </div>
                       <div>
                         <label className="text-sm text-gray-400 mb-1 block">Email *</label>
-                        <Input required type="email" name="email" className={inputClass} placeholder="business@email.com" />
+                        <Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} placeholder="business@email.com" />
                       </div>
                       <div>
                         <label className="text-sm text-gray-400 mb-1 block">Phone</label>
-                        <Input type="tel" name="phone" className={inputClass} placeholder="+880 1XXX-XXXXXX" />
+                        <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="+880 1XXX-XXXXXX" />
                       </div>
                       <div className="sm:col-span-2">
                         <label className="text-sm text-gray-400 mb-1 block">Address</label>
-                        <Input name="address" className={inputClass} placeholder="Business address" />
+                        <Input value={address} onChange={(e) => setAddress(e.target.value)} className={inputClass} placeholder="Business address" />
                       </div>
                       <div>
                         <label className="text-sm text-gray-400 mb-1 block">Business Type</label>
-                        <Input name="businessType" className={inputClass} placeholder="e.g. E-commerce, Agency, Startup" />
-                      </div>
-                      <div>
-                        <label className="text-sm text-gray-400 mb-1 block">Product Categories</label>
-                        <Input name="productCategories" className={inputClass} placeholder="e.g. Electronics, Fashion, Food" />
+                        <Input value={businessType} onChange={(e) => setBusinessType(e.target.value)} className={inputClass} placeholder="e.g. E-commerce, Agency, Startup" />
                       </div>
                     </div>
+                  </div>
+
+                  <hr className="border-white/10" />
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gradient">Product Categories</h3>
+                    {renderTagInput(productCategories, setProductCategories, categoryInput, setCategoryInput, "e.g. Electronics, Fashion")}
                   </div>
 
                   <hr className="border-white/10" />
@@ -193,15 +284,15 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="sm:col-span-2">
                         <label className="text-sm text-gray-400 mb-1 block">Website Features Needed</label>
-                        <Textarea name="websiteFeatures" className={inputClass + " min-h-[80px]"} placeholder="List the features you need (e.g. product catalog, payment gateway, blog, user accounts...)" />
+                        {renderTagInput(websiteFeatures, setWebsiteFeatures, featureInput, setFeatureInput, "e.g. Payment, Blog, User accounts")}
                       </div>
                       <div>
                         <label className="text-sm text-gray-400 mb-1 block">Preferred Domain Name</label>
-                        <Input name="preferredDomain" className={inputClass} placeholder="yourbusiness.com" />
+                        <Input value={preferredDomain} onChange={(e) => setPreferredDomain(e.target.value)} className={inputClass} placeholder="yourbusiness.com" />
                       </div>
                       <div>
-                        <label className="text-sm text-gray-400 mb-1 block">Preferred Design Style</label>
-                        <Input name="designStyle" className={inputClass} placeholder="e.g. Modern, Minimal, Corporate, Creative" />
+                        <label className="text-sm text-gray-400 mb-1 block">Preferred Design Styles</label>
+                        {renderTagInput(designStyles, setDesignStyles, styleInput, setStyleInput, "e.g. Modern, Minimal")}
                       </div>
                     </div>
                   </div>
@@ -213,11 +304,11 @@ export function BusinessOrderForm({ open, onClose }: { open: boolean; onClose: (
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="sm:col-span-2">
                         <label className="text-sm text-gray-400 mb-1 block">Social Links</label>
-                        <Input name="socialLinks" className={inputClass} placeholder="Facebook, Instagram, LinkedIn URLs" />
+                        {renderTagInput(socialLinks, setSocialLinks, socialInput, setSocialInput, "Facebook, Instagram, LinkedIn URLs")}
                       </div>
                       <div className="sm:col-span-2">
                         <label className="text-sm text-gray-400 mb-1 block">Additional Notes</label>
-                        <Textarea name="additionalNotes" className={inputClass + " min-h-[80px]"} placeholder="Any special requirements or messages..." />
+                        <Textarea value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className={inputClass + " min-h-[80px]"} placeholder="Any special requirements or messages..." />
                       </div>
                     </div>
                   </div>
