@@ -7,22 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
-  Trash2,
-  Copy,
-  Check,
-  Download,
-  Eye,
-  X,
-  Mail,
-  Phone,
-  MapPin,
-  Globe,
-  Briefcase,
-  Image,
-  FileText,
-  User,
-  Calendar,
+  Search, Trash2, Copy, Check, Download, Eye, X,
+  Mail, Phone, MapPin, Globe, Briefcase,
+  Image, FileText, User, Calendar, Tag, Link,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -112,6 +99,15 @@ export default function AdminBusinessOrders() {
         </div>
       </div>
     ) : null;
+
+  const tagList = (items: string | null | undefined) =>
+    items
+      ? items.split(", ").filter(Boolean).map((item) => (
+          <Badge key={item} variant="secondary" className="text-xs">
+            {item}
+          </Badge>
+        ))
+      : null;
 
   return (
     <div className="space-y-6">
@@ -246,7 +242,17 @@ export default function AdminBusinessOrders() {
                     {infoRow(<Phone className="h-4 w-4 text-gray-500" />, "Phone", viewing.phone)}
                     {infoRow(<MapPin className="h-4 w-4 text-gray-500" />, "Address", viewing.address)}
                     {infoRow(null, "Business Type", viewing.businessType)}
-                    {infoRow(null, "Product Categories", viewing.productCategories)}
+                    {viewing.productCategories && (
+                      <div className="flex items-start gap-3 text-sm">
+                        <Tag className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
+                        <div>
+                          <span className="text-gray-500">Categories:</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {tagList(viewing.productCategories)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     {infoRow(<Calendar className="h-4 w-4 text-gray-500" />, "Created", formatDate(new Date(viewing.createdAt)))}
                   </div>
                 </div>
@@ -257,20 +263,39 @@ export default function AdminBusinessOrders() {
                   </h3>
                   <div className="space-y-2">
                     {viewing.websiteFeatures && (
-                      <div>
-                        <span className="text-sm text-gray-500">Features:</span>
-                        <p className="text-sm text-gray-300 mt-1 bg-white/5 rounded-lg p-3">{viewing.websiteFeatures}</p>
+                      <div className="flex items-start gap-3 text-sm">
+                        <FileText className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
+                        <div>
+                          <span className="text-gray-500">Features:</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {tagList(viewing.websiteFeatures)}
+                          </div>
+                        </div>
                       </div>
                     )}
                     {infoRow(null, "Preferred Domain", viewing.preferredDomain)}
-                    {infoRow(null, "Design Style", viewing.designStyle)}
+                    {viewing.designStyle && (
+                      <div className="flex items-start gap-3 text-sm">
+                        <Tag className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
+                        <div>
+                          <span className="text-gray-500">Design Styles:</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {tagList(viewing.designStyle)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {viewing.socialLinks && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Social Links</h3>
-                    <p className="text-sm text-gray-300 bg-white/5 rounded-lg p-3">{viewing.socialLinks}</p>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Link className="h-4 w-4" /> Social Links
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {tagList(viewing.socialLinks)}
+                    </div>
                   </div>
                 )}
 

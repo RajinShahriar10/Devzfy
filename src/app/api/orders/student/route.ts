@@ -25,6 +25,11 @@ export async function GET(req: NextRequest) {
     const orders = await prisma.studentOrder.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      include: {
+        awards: true,
+        certificates: true,
+        research: true,
+      },
     });
 
     return NextResponse.json({ orders });

@@ -7,27 +7,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
-  Trash2,
-  Copy,
-  Check,
-  Download,
-  ExternalLink,
-  Eye,
-  X,
-  Calendar,
-  Mail,
-  Phone,
-  MapPin,
-  Globe,
-  Award,
-  BookOpen,
-  Briefcase,
-  Wrench,
-  FileText,
-  User,
+  Search, Trash2, Copy, Check, Download, ExternalLink, Eye, X,
+  Calendar, Mail, Phone, MapPin, Globe, Award as AwardIcon,
+  BookOpen, Briefcase, Wrench, FileText, User,
+  GraduationCap, Beaker,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+
+interface StudentAward {
+  id: string;
+  name: string;
+  date: string | null;
+  image: string | null;
+}
+
+interface StudentCertificate {
+  id: string;
+  name: string;
+  date: string | null;
+  file: string | null;
+}
+
+interface StudentResearch {
+  id: string;
+  title: string;
+  role: string | null;
+  date: string | null;
+  conference: string | null;
+  publicationUrl: string | null;
+}
 
 interface StudentOrder {
   id: string;
@@ -48,20 +56,12 @@ interface StudentOrder {
   duration: string | null;
   experienceDescription: string | null;
   skills: string[];
-  awardName: string | null;
-  awardDate: string | null;
-  awardImage: string | null;
   activities: string[];
-  certificateName: string | null;
-  certificateDate: string | null;
-  certificateFile: string | null;
-  researchTitle: string | null;
-  researchRole: string | null;
-  researchDate: string | null;
-  conferenceName: string | null;
-  publicationLink: string | null;
   additionalNotes: string | null;
   createdAt: string;
+  awards: StudentAward[];
+  certificates: StudentCertificate[];
+  research: StudentResearch[];
 }
 
 export default function AdminStudentOrders() {
@@ -84,9 +84,7 @@ export default function AdminStudentOrders() {
     }
   }
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+  useEffect(() => { fetchOrders(); }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => fetchOrders(search), 300);
@@ -254,6 +252,7 @@ export default function AdminStudentOrders() {
               </div>
 
               <div className="space-y-6">
+                {/* Personal Information */}
                 <div>
                   <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <User className="h-4 w-4" /> Personal Information
@@ -266,6 +265,7 @@ export default function AdminStudentOrders() {
                   </div>
                 </div>
 
+                {/* Links */}
                 {(viewing.githubUrl || viewing.linkedinUrl) && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -286,10 +286,11 @@ export default function AdminStudentOrders() {
                   </div>
                 )}
 
+                {/* Education */}
                 {(viewing.degree || viewing.institution) && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <BookOpen className="h-4 w-4" /> Education
+                      <GraduationCap className="h-4 w-4" /> Education
                     </h3>
                     <div className="space-y-2">
                       {infoRow(null, "Degree", viewing.degree)}
@@ -300,6 +301,7 @@ export default function AdminStudentOrders() {
                   </div>
                 )}
 
+                {/* Experience */}
                 {viewing.company && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -314,6 +316,7 @@ export default function AdminStudentOrders() {
                   </div>
                 )}
 
+                {/* Skills */}
                 {viewing.skills.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -327,79 +330,101 @@ export default function AdminStudentOrders() {
                   </div>
                 )}
 
-                {viewing.awardName && (
+                {/* Awards */}
+                {viewing.awards.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Award className="h-4 w-4" /> Awards
+                      <AwardIcon className="h-4 w-4" /> Awards
                     </h3>
-                    <div className="space-y-2">
-                      {infoRow(null, "Award", viewing.awardName)}
-                      {infoRow(null, "Date", viewing.awardDate)}
-                      {viewing.awardImage && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-500">Image:</span>
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => downloadDataURL(viewing.awardImage!, "award-image")}
-                          >
-                            <Download className="h-3.5 w-3.5 mr-1" /> Download
-                          </Button>
+                    <div className="space-y-3">
+                      {viewing.awards.map((aw, i) => (
+                        <div key={aw.id} className="glass rounded-lg p-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-200">#{i + 1} {aw.name}</p>
+                          {aw.date && <p className="text-xs text-gray-400">Date: {aw.date}</p>}
+                          {aw.image && (
+                            <div className="flex items-center gap-2">
+                              <div className="h-16 w-16 rounded-lg overflow-hidden border border-white/10">
+                                <img src={aw.image} alt={aw.name} className="h-full w-full object-cover" />
+                              </div>
+                              <Button variant="secondary" size="sm" onClick={() => downloadDataURL(aw.image!, `award-${i + 1}`)}>
+                                <Download className="h-3.5 w-3.5 mr-1" /> Download
+                              </Button>
+                            </div>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
-                    {viewing.activities.length > 0 && (
-                      <div className="mt-3">
-                        <p className="text-sm text-gray-500 mb-2">Activities:</p>
-                        <ul className="list-disc list-inside space-y-1">
-                          {viewing.activities.map((a, i) => (
-                            <li key={i} className="text-sm text-gray-300">{a}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
                   </div>
                 )}
 
-                {(viewing.certificateName || viewing.researchTitle) && (
+                {/* Activities */}
+                {viewing.activities.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <FileText className="h-4 w-4" /> Certificates & Research
+                      <BookOpen className="h-4 w-4" /> Extracurricular Activities
                     </h3>
-                    {viewing.certificateName && (
-                      <div className="space-y-2 mb-3">
-                        {infoRow(null, "Certificate", viewing.certificateName)}
-                        {infoRow(null, "Date", viewing.certificateDate)}
-                        {viewing.certificateFile && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-500">File:</span>
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => downloadDataURL(viewing.certificateFile!, "certificate-file")}
-                            >
-                              <Download className="h-3.5 w-3.5 mr-1" /> Download
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    {viewing.researchTitle && (
-                      <div className="space-y-2">
-                        {infoRow(null, "Title", viewing.researchTitle)}
-                        {infoRow(null, "Role", viewing.researchRole)}
-                        {infoRow(null, "Date", viewing.researchDate)}
-                        {infoRow(null, "Conference", viewing.conferenceName)}
-                        {viewing.publicationLink && (
-                          <a href={viewing.publicationLink} target="_blank" className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300">
-                            <ExternalLink className="h-3.5 w-3.5" /> Publication Link
-                          </a>
-                        )}
-                      </div>
-                    )}
+                    <ul className="list-disc list-inside space-y-1">
+                      {viewing.activities.map((a, i) => (
+                        <li key={i} className="text-sm text-gray-300">{a}</li>
+                      ))}
+                    </ul>
                   </div>
                 )}
 
+                {/* Certificates */}
+                {viewing.certificates.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <FileText className="h-4 w-4" /> Certificates
+                    </h3>
+                    <div className="space-y-3">
+                      {viewing.certificates.map((cert, i) => (
+                        <div key={cert.id} className="glass rounded-lg p-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-200">#{i + 1} {cert.name}</p>
+                          {cert.date && <p className="text-xs text-gray-400">Date: {cert.date}</p>}
+                          {cert.file && (
+                            <div className="flex items-center gap-2">
+                              {cert.file.startsWith("data:image") ? (
+                                <div className="h-16 w-16 rounded-lg overflow-hidden border border-white/10">
+                                  <img src={cert.file} alt={cert.name} className="h-full w-full object-cover" />
+                                </div>
+                              ) : null}
+                              <Button variant="secondary" size="sm" onClick={() => downloadDataURL(cert.file!, `certificate-${i + 1}`)}>
+                                <Download className="h-3.5 w-3.5 mr-1" /> Download
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Research */}
+                {viewing.research.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Beaker className="h-4 w-4" /> Research
+                    </h3>
+                    <div className="space-y-3">
+                      {viewing.research.map((r, i) => (
+                        <div key={r.id} className="glass rounded-lg p-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-200">#{i + 1} {r.title}</p>
+                          {r.role && <p className="text-xs text-gray-400">Role: {r.role}</p>}
+                          {r.date && <p className="text-xs text-gray-400">Date: {r.date}</p>}
+                          {r.conference && <p className="text-xs text-gray-400">Conference: {r.conference}</p>}
+                          {r.publicationUrl && (
+                            <a href={r.publicationUrl} target="_blank" className="flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300">
+                              <ExternalLink className="h-3 w-3" /> Publication Link
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional Notes */}
                 {viewing.additionalNotes && (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Additional Notes</h3>
