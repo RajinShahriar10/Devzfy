@@ -94,6 +94,29 @@ async function main() {
     console.log("SEO settings seeded.");
   }
 
+  const techCount = await prisma.technology.count();
+  if (techCount === 0) {
+    await prisma.technology.createMany({
+      data: [
+        { name: "Next.js", icon: "nextjs", category: "Framework", order: 0 },
+        { name: "React", icon: "react", category: "Frontend", order: 1 },
+        { name: "TypeScript", icon: "typescript", category: "Language", order: 2 },
+        { name: "Node.js", icon: "nodejs", category: "Runtime", order: 3 },
+        { name: "PostgreSQL", icon: "postgresql", category: "Database", order: 4 },
+        { name: "Prisma", icon: "prisma", category: "ORM", order: 5 },
+        { name: "Tailwind CSS", icon: "tailwindcss", category: "Styling", order: 6 },
+        { name: "Framer Motion", icon: "framermotion", category: "Animation", order: 7 },
+        { name: "NextAuth.js", icon: "nextauth", category: "Authentication", order: 8 },
+        { name: "Cloudinary", icon: "cloudinary", category: "Media", order: 9 },
+        { name: "Neon", icon: "neon", category: "Database", order: 10 },
+        { name: "Zustand", icon: "zustand", category: "State Management", order: 11 },
+        { name: "Radix UI", icon: "radixui", category: "Components", order: 12 },
+        { name: "Lucide", icon: "lucide", category: "Icons", order: 13 },
+      ],
+    });
+    console.log("Technologies seeded.");
+  }
+
   console.log("Seeding complete!");
 }
 

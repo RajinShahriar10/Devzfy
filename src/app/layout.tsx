@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { prisma } from "@/lib/prisma";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { SessionProvider } from "@/providers/SessionProvider";
 import { Header } from "@/components/layout/Header";
@@ -49,11 +50,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://devzfy.vercel.app"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settingsList = await prisma.siteSetting.findMany();
+  const settings: Record<string, string> = {};
+  for (const s of settingsList) {
+    settings[s.key] = s.value;
+  }
+
   return (
     <html
       lang="en"
@@ -66,7 +73,7 @@ export default function RootLayout({
             <Particles />
             <Header />
             <main className="relative z-10">{children}</main>
-            <Footer />
+            <Footer settings={settings} />
           </SessionProvider>
         </ThemeProvider>
       </body>

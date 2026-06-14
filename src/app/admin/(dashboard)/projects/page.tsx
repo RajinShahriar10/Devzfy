@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Plus, Pencil, Trash2, ExternalLink, X, Save, Loader2, Code2,
+  Plus, Pencil, Trash2, ExternalLink, X, Save, Loader2, Code2, Upload,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -48,6 +48,11 @@ export default function AdminProjects() {
   const [showForm, setShowForm] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isImageUrl = (val: string) =>
+    val.startsWith("http://") || val.startsWith("https://") || val.startsWith("data:");
 
   const formRef = useRef(form);
   formRef.current = form;
@@ -97,6 +102,29 @@ export default function AdminProjects() {
   function closeForm() {
     setShowForm(false);
     setForm(emptyProject());
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "projects");
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.success) {
+        updateForm({ image: data.url });
+      } else {
+        alert("Upload failed: " + (data.error || "Unknown error"));
+      }
+    } catch {
+      alert("Failed to upload image");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   }
 
   async function saveProject() {
@@ -223,24 +251,65 @@ export default function AdminProjects() {
 
                 <div>
                   <label className="text-sm text-gray-400 mb-1 block">Thumbnail / Image</label>
-                  <div className="flex gap-2 flex-wrap mb-2">
-                    {gradients.map((g) => (
-                      <button
-                        key={g}
-                        type="button"
-                        onClick={() => updateForm({ image: g })}
-                        className={`h-8 w-8 rounded-full ${g} border-2 transition-all ${
-                          form.image === g ? "border-white scale-110" : "border-transparent"
-                        }`}
+
+                  {isImageUrl(form.image) ? (
+                    <div className="relative mb-3 rounded-xl overflow-hidden h-40 bg-black/20">
+                      <img
+                        src={form.image}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
                       />
-                    ))}
+                      <button
+                        type="button"
+                        onClick={() => updateForm({ image: gradients[0] })}
+                        className="absolute top-2 right-2 p-1 rounded-full bg-black/60 text-white hover:bg-black/80"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2 flex-wrap mb-2">
+                      {gradients.map((g) => (
+                        <button
+                          key={g}
+                          type="button"
+                          onClick={() => updateForm({ image: g })}
+                          className={`h-8 w-8 rounded-full ${g} border-2 transition-all ${
+                            form.image === g ? "border-white scale-110" : "border-transparent"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex gap-2">
+                    <Button
+                      variant="secondary"
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                      className="shrink-0"
+                    >
+                      {uploading ? (
+                        <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Uploading...</>
+                      ) : (
+                        <><Upload className="h-4 w-4 mr-1" /> Upload Image</>
+                      )}
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleUpload}
+                    />
+                    <Input
+                      value={form.image}
+                      onChange={(e) => updateForm({ image: e.target.value })}
+                      placeholder="Or paste an image URL or gradient class"
+                      className="text-sm flex-1"
+                    />
                   </div>
-                  <Input
-                    value={form.image}
-                    onChange={(e) => updateForm({ image: e.target.value })}
-                    placeholder="Or enter a custom gradient class or image URL"
-                    className="text-sm"
-                  />
                 </div>
 
                 <div>
@@ -320,11 +389,19 @@ export default function AdminProjects() {
           <GlassCard key={project.id} hover={false}>
             <div className="flex items-start gap-4">
               <div
-                className={`h-16 w-16 rounded-xl ${project.image} flex items-center justify-center shrink-0`}
+                className={`h-16 w-16 rounded-xl ${isImageUrl(project.image) ? "bg-gradient-to-br from-purple-600 to-blue-600" : project.image} flex items-center justify-center shrink-0 overflow-hidden`}
               >
-                <span className="text-xl font-bold text-white/40 select-none">
-                  {initials(project.title)}
-                </span>
+                {isImageUrl(project.image) ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xl font-bold text-white/40 select-none">
+                    {initials(project.title)}
+                  </span>
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-lg">{project.title}</h3>

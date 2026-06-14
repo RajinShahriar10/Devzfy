@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Globe, Users, Mail, Heart, ArrowUp } from "lucide-react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
@@ -34,21 +33,7 @@ const socialIcons = [
   { key: "contact_email", label: "Email", icon: Mail },
 ];
 
-export function Footer() {
-  const [settings, setSettings] = useState<SiteSettings>({
-    facebook_url: "#",
-    linkedin_url: "#",
-    contact_email: "hello@devzfy.com",
-  });
-
-  useEffect(() => {
-    fetch("/api/settings")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.settings) setSettings(data.settings);
-      })
-      .catch(() => {});
-  }, []);
+export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<SiteSettings> }) {
 
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });

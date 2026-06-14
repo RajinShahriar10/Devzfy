@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ExternalLink, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -28,21 +28,15 @@ const slideVariants = {
   exit: (direction: number) => ({ x: direction < 0 ? 300 : -300, opacity: 0 }),
 };
 
-export function PortfolioSection() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+function isImageUrl(val: string) {
+  return val.startsWith("http://") || val.startsWith("https://") || val.startsWith("data:");
+}
+
+export function PortfolioSection({ projects }: { projects: Project[] }) {
   const [[current, direction], setCurrent] = useState([0, 0]);
   const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
   const touchStart = useRef<number>(0);
   const touchEnd = useRef<number>(0);
-
-  useEffect(() => {
-    fetch("/api/projects")
-      .then((r) => r.json())
-      .then((data) => setProjects(data.projects || []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
 
   const total = projects.length;
 
@@ -77,18 +71,6 @@ export function PortfolioSection() {
       else prev();
     }
   };
-
-  if (loading) {
-    return (
-      <section className="relative py-24 lg:py-32" id="projects">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   if (projects.length === 0) {
     return null;
@@ -129,16 +111,26 @@ export function PortfolioSection() {
               >
                 <div className="grid md:grid-cols-2">
                   <div
-                    className={`h-64 md:h-full min-h-[300px] ${project.image} flex items-center justify-center relative overflow-hidden`}
+                    className={`h-64 md:h-full min-h-[300px] ${isImageUrl(project.image) ? "" : project.image} flex items-center justify-center relative overflow-hidden`}
                   >
-                    <div className="absolute inset-0 bg-black/20" />
-                    <motion.span
-                      className="relative text-6xl md:text-8xl font-bold text-white/30 select-none"
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                    >
-                      {initials(project.title)}
-                    </motion.span>
+                    {isImageUrl(project.image) ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-black/20" />
+                        <motion.span
+                          className="relative text-6xl md:text-8xl font-bold text-white/30 select-none"
+                          animate={{ scale: [1, 1.05, 1] }}
+                          transition={{ duration: 4, repeat: Infinity }}
+                        >
+                          {initials(project.title)}
+                        </motion.span>
+                      </>
+                    )}
                   </div>
 
                   <div className="p-8 md:p-10 flex flex-col justify-center">

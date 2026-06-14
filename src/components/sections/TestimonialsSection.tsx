@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/GlassCard";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -16,17 +16,9 @@ interface Testimonial {
   rating: number;
 }
 
-export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+export function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
-
-  useEffect(() => {
-    fetch("/api/testimonials")
-      .then((res) => res.json())
-      .then((data) => setTestimonials(data.testimonials || []))
-      .catch(() => {});
-  }, []);
 
   const next = useCallback(() => {
     setDirection(1);

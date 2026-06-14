@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { GlassCard } from "@/components/GlassCard";
@@ -36,15 +35,7 @@ function getGradient(index: number): string {
   return gradients[index % gradients.length];
 }
 
-export function TechnologiesSection() {
-  const [technologies, setTechnologies] = useState<Technology[]>([]);
-
-  useEffect(() => {
-    fetch("/api/technologies")
-      .then((res) => res.json())
-      .then((data) => setTechnologies(data.technologies || []))
-      .catch(() => {});
-  }, []);
+export function TechnologiesSection({ technologies }: { technologies: Technology[] }) {
 
   return (
     <section className="relative py-24 lg:py-32 overflow-hidden" id="technologies">

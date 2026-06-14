@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -18,7 +19,9 @@ const techStack = [
   "AWS", "Docker", "Redis", "GraphQL",
 ];
 
-export default function Services() {
+export default async function Services() {
+  const services = await prisma.service.findMany({ orderBy: { order: "asc" } });
+
   return (
     <>
       <section className="relative pt-32 pb-16 lg:pb-24">
@@ -32,7 +35,7 @@ export default function Services() {
             </p>
           </ScrollReveal>
 
-          <ServicesSection />
+          <ServicesSection services={services} />
 
           <ScrollReveal className="mt-24">
             <h2 className="text-2xl font-bold text-center mb-8">

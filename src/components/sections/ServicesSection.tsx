@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,17 +22,9 @@ interface ServicePackage {
   order: number;
 }
 
-export function ServicesSection() {
-  const [packages, setPackages] = useState<ServicePackage[]>([]);
+export function ServicesSection({ services: packages }: { services: ServicePackage[] }) {
   const [showStudentForm, setShowStudentForm] = useState(false);
   const [showBusinessForm, setShowBusinessForm] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/services")
-      .then((r) => r.json())
-      .then((d) => { if (d.services) setPackages(d.services); })
-      .catch(() => {});
-  }, []);
 
   return (
     <>
@@ -55,7 +47,7 @@ export function ServicesSection() {
           </ScrollReveal>
 
           {packages.length === 0 && (
-            <p className="text-center text-gray-500">Loading services...</p>
+            <p className="text-center text-gray-500">No services available yet.</p>
           )}
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-3xl mx-auto">
