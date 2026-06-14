@@ -35,41 +35,41 @@ export default async function ProjectsPage() {
               <p className="text-gray-500 text-lg">No projects to display yet.</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
               {projects.map((project, index) => (
                 <ScrollReveal key={project.id} delay={index * 0.1}>
                   <GlassCard className="h-full overflow-hidden group">
                     <div
-                      className={`h-48 ${isImageUrl(project.image) ? "" : project.image} flex items-center justify-center relative overflow-hidden`}
+                      className={`h-56 ${isImageUrl(project.image) ? "bg-black/10" : project.image} flex items-center justify-center relative overflow-hidden`}
                     >
                       {isImageUrl(project.image) ? (
                         <img
                           src={project.image}
                           alt={project.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-contain p-3"
                         />
                       ) : (
                         <>
                           <div className="absolute inset-0 bg-black/20" />
-                          <span className="relative text-4xl font-bold text-white/30 select-none">
+                          <span className="relative text-5xl font-bold text-white/30 select-none">
                             {initials(project.title)}
                           </span>
                         </>
                       )}
                     </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                      <p className="text-sm text-gray-400 mb-4 line-clamp-3">
+                    <div className="p-6 lg:p-8">
+                      <h3 className="text-xl font-bold mb-3">{project.title}</h3>
+                      <p className="text-sm text-gray-400 mb-5 leading-relaxed">
                         {project.description}
                       </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="flex flex-wrap gap-2 mb-5">
                         {project.tags.map((tag) => (
                           <Badge key={tag} variant="secondary" className="text-xs">
                             {tag}
                           </Badge>
                         ))}
                       </div>
-                      <div className="flex gap-3">
+                      <div className="flex flex-wrap gap-3">
                         {project.demoUrl && (
                           <Link href={project.demoUrl} target="_blank">
                             <Button size="sm" className="group">

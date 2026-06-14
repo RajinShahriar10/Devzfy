@@ -6,6 +6,8 @@ import { TechnologiesSection } from "@/components/sections/TechnologiesSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { CTASection } from "@/components/sections/CTASection";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const [hero, services, projects, technologies, testimonials] = await Promise.all([
     prisma.heroContent.findFirst(),

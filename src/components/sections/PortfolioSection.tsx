@@ -111,13 +111,13 @@ export function PortfolioSection({ projects }: { projects: Project[] }) {
               >
                 <div className="grid md:grid-cols-2">
                   <div
-                    className={`h-64 md:h-full min-h-[300px] ${isImageUrl(project.image) ? "" : project.image} flex items-center justify-center relative overflow-hidden`}
+                    className={`h-72 md:h-full min-h-[320px] ${isImageUrl(project.image) ? "" : project.image} flex items-center justify-center relative overflow-hidden bg-black/10`}
                   >
                     {isImageUrl(project.image) ? (
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="w-full h-full object-contain p-4"
                       />
                     ) : (
                       <>
@@ -133,7 +133,7 @@ export function PortfolioSection({ projects }: { projects: Project[] }) {
                     )}
                   </div>
 
-                  <div className="p-8 md:p-10 flex flex-col justify-center">
+                  <div className="p-6 md:p-8 flex flex-col justify-center">
                     <h3 className="text-2xl md:text-3xl font-bold mb-3">
                       {project.title}
                     </h3>
