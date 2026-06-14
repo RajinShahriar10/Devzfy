@@ -8,18 +8,18 @@ cloudinary.config({
 
 export async function uploadToCloudinary(
   file: string,
-  folder: string
 ): Promise<string> {
   const result = await cloudinary.uploader.upload(file, {
-    folder: `devzfy/${folder}`,
+    folder: "devzfy",
     resource_type: "auto",
   });
   return result.secure_url;
 }
 
 export async function deleteFromCloudinary(url: string): Promise<void> {
-  const publicId = url.split("/").slice(-2).join("/").split(".")[0];
-  await cloudinary.uploader.destroy(`devzfy/${publicId}`);
+  const segments = url.split("/");
+  const publicId = segments.slice(segments.indexOf("devzfy")).join("/").split(".")[0];
+  await cloudinary.uploader.destroy(publicId);
 }
 
 export { cloudinary };
