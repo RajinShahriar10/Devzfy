@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 
 interface HeroContent {
   id?: string;
@@ -209,13 +210,15 @@ export function HeroSection({ hero }: { hero: HeroContent | null }) {
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
         >
           {[
-            { value: "50+", label: "Projects Delivered" },
-            { value: "30+", label: "Happy Clients" },
-            { value: "5+", label: "Years Experience" },
-            { value: "99%", label: "Client Satisfaction" },
+            { value: 50, suffix: "+", label: "Projects Delivered" },
+            { value: 30, suffix: "+", label: "Happy Clients" },
+            { value: 5, suffix: "+", label: "Years Experience" },
+            { value: 99, suffix: "%", label: "Client Satisfaction" },
           ].map((stat) => (
             <div key={stat.label} className="glass rounded-xl p-4">
-              <div className="text-2xl font-bold text-gradient">{stat.value}</div>
+              <div className="text-2xl font-bold text-gradient">
+                <AnimatedCounter to={stat.value} suffix={stat.suffix} />
+              </div>
               <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
             </div>
           ))}
