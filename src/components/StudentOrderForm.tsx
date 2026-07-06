@@ -32,6 +32,7 @@ interface ExperienceEntry {
 interface AwardEntry {
   id: string;
   name: string;
+  competition: string;
   date: string;
   image: string;
 }
@@ -54,7 +55,7 @@ interface ResearchEntry {
 
 const emptyEducation = (): EducationEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), degree: "", institution: "", startDate: "", endDate: "" });
 const emptyExperience = (): ExperienceEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), company: "", position: "", duration: "", description: "" });
-const emptyAward = (): AwardEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", date: "", image: "" });
+const emptyAward = (): AwardEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", competition: "", date: "", image: "" });
 const emptyCertificate = (): CertificateEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", date: "", file: "" });
 const emptyResearch = (): ResearchEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), title: "", role: "", date: "", conference: "", publicationUrl: "" });
 
@@ -186,7 +187,7 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
       experiences: experiences.map(({ id, company, position, duration, description }) => ({
         company, position, duration, experienceDescription: description,
       })),
-      awards: awards.map(({ id, name, date, image }) => ({ name, date: date || null, image: image || null })),
+      awards: awards.map(({ id, name, competition, date, image }) => ({ name, competition: competition || null, date: date || null, image: image || null })),
       certificates: certificates.map(({ id, name, date, file }) => ({ name, date: date || null, file: file || null })),
       research: research.map(({ id, title, role, date, conference, publicationUrl }) => ({
         title, role: role || null, date: date || null, conference: conference || null, publicationUrl: publicationUrl || null,
@@ -439,6 +440,10 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
                     <div className="sm:col-span-2">
                       <label className="text-xs text-gray-400 mb-1 block">Award Name</label>
                       <Input value={aw.name} onChange={(e) => updateAward(aw.id, "name", e.target.value)} className={inputClass} placeholder="Award title" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="text-xs text-gray-400 mb-1 block">Competition Name</label>
+                      <Input value={aw.competition} onChange={(e) => updateAward(aw.id, "competition", e.target.value)} className={inputClass} placeholder="Name of the competition" />
                     </div>
                     <div>
                       <label className="text-xs text-gray-400 mb-1 block">Award Date</label>

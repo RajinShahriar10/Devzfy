@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
     if (body.awards && Array.isArray(body.awards)) {
       await prisma.studentAward.createMany({
-        data: body.awards.map((a: { name: string; date?: string; image?: string }) => ({ ...a, orderId: order.id })),
+        data: body.awards.map((a: { name: string; competition?: string; date?: string; image?: string }) => ({ ...a, orderId: order.id })),
       });
     }
     if (body.certificates && Array.isArray(body.certificates)) {

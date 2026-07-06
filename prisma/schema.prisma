@@ -135,13 +135,14 @@ model StudentOrder {
 }
 
 model StudentAward {
-  id        String   @id @default(cuid())
-  name      String
-  date      String?
-  image     String?
-  orderId   String
-  order     StudentOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  competition String?
+  date        String?
+  image       String?
+  orderId     String
+  order       StudentOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 }
 
 model StudentCertificate {
