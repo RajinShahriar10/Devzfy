@@ -27,6 +27,7 @@ export type AggregateStudentAward = {
 export type StudentAwardMinAggregateOutputType = {
   id: string | null
   name: string | null
+  competition: string | null
   date: string | null
   image: string | null
   orderId: string | null
@@ -36,6 +37,7 @@ export type StudentAwardMinAggregateOutputType = {
 export type StudentAwardMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  competition: string | null
   date: string | null
   image: string | null
   orderId: string | null
@@ -45,6 +47,7 @@ export type StudentAwardMaxAggregateOutputType = {
 export type StudentAwardCountAggregateOutputType = {
   id: number
   name: number
+  competition: number
   date: number
   image: number
   orderId: number
@@ -56,6 +59,7 @@ export type StudentAwardCountAggregateOutputType = {
 export type StudentAwardMinAggregateInputType = {
   id?: true
   name?: true
+  competition?: true
   date?: true
   image?: true
   orderId?: true
@@ -65,6 +69,7 @@ export type StudentAwardMinAggregateInputType = {
 export type StudentAwardMaxAggregateInputType = {
   id?: true
   name?: true
+  competition?: true
   date?: true
   image?: true
   orderId?: true
@@ -74,6 +79,7 @@ export type StudentAwardMaxAggregateInputType = {
 export type StudentAwardCountAggregateInputType = {
   id?: true
   name?: true
+  competition?: true
   date?: true
   image?: true
   orderId?: true
@@ -156,6 +162,7 @@ export type StudentAwardGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type StudentAwardGroupByOutputType = {
   id: string
   name: string
+  competition: string | null
   date: string | null
   image: string | null
   orderId: string
@@ -186,6 +193,7 @@ export type StudentAwardWhereInput = {
   NOT?: Prisma.StudentAwardWhereInput | Prisma.StudentAwardWhereInput[]
   id?: Prisma.StringFilter<"StudentAward"> | string
   name?: Prisma.StringFilter<"StudentAward"> | string
+  competition?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   date?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   image?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   orderId?: Prisma.StringFilter<"StudentAward"> | string
@@ -196,6 +204,7 @@ export type StudentAwardWhereInput = {
 export type StudentAwardOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  competition?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   orderId?: Prisma.SortOrder
@@ -209,6 +218,7 @@ export type StudentAwardWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StudentAwardWhereInput[]
   NOT?: Prisma.StudentAwardWhereInput | Prisma.StudentAwardWhereInput[]
   name?: Prisma.StringFilter<"StudentAward"> | string
+  competition?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   date?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   image?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   orderId?: Prisma.StringFilter<"StudentAward"> | string
@@ -219,6 +229,7 @@ export type StudentAwardWhereUniqueInput = Prisma.AtLeast<{
 export type StudentAwardOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  competition?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   orderId?: Prisma.SortOrder
@@ -234,6 +245,7 @@ export type StudentAwardScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StudentAwardScalarWhereWithAggregatesInput | Prisma.StudentAwardScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"StudentAward"> | string
   name?: Prisma.StringWithAggregatesFilter<"StudentAward"> | string
+  competition?: Prisma.StringNullableWithAggregatesFilter<"StudentAward"> | string | null
   date?: Prisma.StringNullableWithAggregatesFilter<"StudentAward"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"StudentAward"> | string | null
   orderId?: Prisma.StringWithAggregatesFilter<"StudentAward"> | string
@@ -243,6 +255,7 @@ export type StudentAwardScalarWhereWithAggregatesInput = {
 export type StudentAwardCreateInput = {
   id?: string
   name: string
+  competition?: string | null
   date?: string | null
   image?: string | null
   createdAt?: Date | string
@@ -252,6 +265,7 @@ export type StudentAwardCreateInput = {
 export type StudentAwardUncheckedCreateInput = {
   id?: string
   name: string
+  competition?: string | null
   date?: string | null
   image?: string | null
   orderId: string
@@ -261,6 +275,7 @@ export type StudentAwardUncheckedCreateInput = {
 export type StudentAwardUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -270,6 +285,7 @@ export type StudentAwardUpdateInput = {
 export type StudentAwardUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -279,6 +295,7 @@ export type StudentAwardUncheckedUpdateInput = {
 export type StudentAwardCreateManyInput = {
   id?: string
   name: string
+  competition?: string | null
   date?: string | null
   image?: string | null
   orderId: string
@@ -288,6 +305,7 @@ export type StudentAwardCreateManyInput = {
 export type StudentAwardUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -296,6 +314,7 @@ export type StudentAwardUpdateManyMutationInput = {
 export type StudentAwardUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -315,6 +334,7 @@ export type StudentAwardOrderByRelationAggregateInput = {
 export type StudentAwardCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  competition?: Prisma.SortOrder
   date?: Prisma.SortOrder
   image?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
@@ -324,6 +344,7 @@ export type StudentAwardCountOrderByAggregateInput = {
 export type StudentAwardMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  competition?: Prisma.SortOrder
   date?: Prisma.SortOrder
   image?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
@@ -333,6 +354,7 @@ export type StudentAwardMaxOrderByAggregateInput = {
 export type StudentAwardMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  competition?: Prisma.SortOrder
   date?: Prisma.SortOrder
   image?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
@@ -384,6 +406,7 @@ export type StudentAwardUncheckedUpdateManyWithoutOrderNestedInput = {
 export type StudentAwardCreateWithoutOrderInput = {
   id?: string
   name: string
+  competition?: string | null
   date?: string | null
   image?: string | null
   createdAt?: Date | string
@@ -392,6 +415,7 @@ export type StudentAwardCreateWithoutOrderInput = {
 export type StudentAwardUncheckedCreateWithoutOrderInput = {
   id?: string
   name: string
+  competition?: string | null
   date?: string | null
   image?: string | null
   createdAt?: Date | string
@@ -429,6 +453,7 @@ export type StudentAwardScalarWhereInput = {
   NOT?: Prisma.StudentAwardScalarWhereInput | Prisma.StudentAwardScalarWhereInput[]
   id?: Prisma.StringFilter<"StudentAward"> | string
   name?: Prisma.StringFilter<"StudentAward"> | string
+  competition?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   date?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   image?: Prisma.StringNullableFilter<"StudentAward"> | string | null
   orderId?: Prisma.StringFilter<"StudentAward"> | string
@@ -438,6 +463,7 @@ export type StudentAwardScalarWhereInput = {
 export type StudentAwardCreateManyOrderInput = {
   id?: string
   name: string
+  competition?: string | null
   date?: string | null
   image?: string | null
   createdAt?: Date | string
@@ -446,6 +472,7 @@ export type StudentAwardCreateManyOrderInput = {
 export type StudentAwardUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -454,6 +481,7 @@ export type StudentAwardUpdateWithoutOrderInput = {
 export type StudentAwardUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +490,7 @@ export type StudentAwardUncheckedUpdateWithoutOrderInput = {
 export type StudentAwardUncheckedUpdateManyWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  competition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -472,6 +501,7 @@ export type StudentAwardUncheckedUpdateManyWithoutOrderInput = {
 export type StudentAwardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  competition?: boolean
   date?: boolean
   image?: boolean
   orderId?: boolean
@@ -482,6 +512,7 @@ export type StudentAwardSelect<ExtArgs extends runtime.Types.Extensions.Internal
 export type StudentAwardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  competition?: boolean
   date?: boolean
   image?: boolean
   orderId?: boolean
@@ -492,6 +523,7 @@ export type StudentAwardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type StudentAwardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  competition?: boolean
   date?: boolean
   image?: boolean
   orderId?: boolean
@@ -502,13 +534,14 @@ export type StudentAwardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type StudentAwardSelectScalar = {
   id?: boolean
   name?: boolean
+  competition?: boolean
   date?: boolean
   image?: boolean
   orderId?: boolean
   createdAt?: boolean
 }
 
-export type StudentAwardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "date" | "image" | "orderId" | "createdAt", ExtArgs["result"]["studentAward"]>
+export type StudentAwardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "competition" | "date" | "image" | "orderId" | "createdAt", ExtArgs["result"]["studentAward"]>
 export type StudentAwardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.StudentOrderDefaultArgs<ExtArgs>
 }
@@ -527,6 +560,7 @@ export type $StudentAwardPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    competition: string | null
     date: string | null
     image: string | null
     orderId: string
@@ -957,6 +991,7 @@ export interface Prisma__StudentAwardClient<T, Null = never, ExtArgs extends run
 export interface StudentAwardFieldRefs {
   readonly id: Prisma.FieldRef<"StudentAward", 'String'>
   readonly name: Prisma.FieldRef<"StudentAward", 'String'>
+  readonly competition: Prisma.FieldRef<"StudentAward", 'String'>
   readonly date: Prisma.FieldRef<"StudentAward", 'String'>
   readonly image: Prisma.FieldRef<"StudentAward", 'String'>
   readonly orderId: Prisma.FieldRef<"StudentAward", 'String'>

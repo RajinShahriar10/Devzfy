@@ -40,6 +40,7 @@ export type BusinessOrderMinAggregateOutputType = {
   socialLinks: string | null
   additionalNotes: string | null
   logoUpload: string | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +61,7 @@ export type BusinessOrderMaxAggregateOutputType = {
   socialLinks: string | null
   additionalNotes: string | null
   logoUpload: string | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -81,6 +83,7 @@ export type BusinessOrderCountAggregateOutputType = {
   additionalNotes: number
   logoUpload: number
   businessImages: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -103,6 +106,7 @@ export type BusinessOrderMinAggregateInputType = {
   socialLinks?: true
   additionalNotes?: true
   logoUpload?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -123,6 +127,7 @@ export type BusinessOrderMaxAggregateInputType = {
   socialLinks?: true
   additionalNotes?: true
   logoUpload?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -144,6 +149,7 @@ export type BusinessOrderCountAggregateInputType = {
   additionalNotes?: true
   logoUpload?: true
   businessImages?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -238,6 +244,7 @@ export type BusinessOrderGroupByOutputType = {
   additionalNotes: string | null
   logoUpload: string | null
   businessImages: string[]
+  status: string
   createdAt: Date
   updatedAt: Date
   _count: BusinessOrderCountAggregateOutputType | null
@@ -280,6 +287,7 @@ export type BusinessOrderWhereInput = {
   additionalNotes?: Prisma.StringNullableFilter<"BusinessOrder"> | string | null
   logoUpload?: Prisma.StringNullableFilter<"BusinessOrder"> | string | null
   businessImages?: Prisma.StringNullableListFilter<"BusinessOrder">
+  status?: Prisma.StringFilter<"BusinessOrder"> | string
   createdAt?: Prisma.DateTimeFilter<"BusinessOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BusinessOrder"> | Date | string
 }
@@ -301,6 +309,7 @@ export type BusinessOrderOrderByWithRelationInput = {
   additionalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   logoUpload?: Prisma.SortOrderInput | Prisma.SortOrder
   businessImages?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -325,6 +334,7 @@ export type BusinessOrderWhereUniqueInput = Prisma.AtLeast<{
   additionalNotes?: Prisma.StringNullableFilter<"BusinessOrder"> | string | null
   logoUpload?: Prisma.StringNullableFilter<"BusinessOrder"> | string | null
   businessImages?: Prisma.StringNullableListFilter<"BusinessOrder">
+  status?: Prisma.StringFilter<"BusinessOrder"> | string
   createdAt?: Prisma.DateTimeFilter<"BusinessOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BusinessOrder"> | Date | string
 }, "id" | "orderCode">
@@ -346,6 +356,7 @@ export type BusinessOrderOrderByWithAggregationInput = {
   additionalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   logoUpload?: Prisma.SortOrderInput | Prisma.SortOrder
   businessImages?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BusinessOrderCountOrderByAggregateInput
@@ -373,6 +384,7 @@ export type BusinessOrderScalarWhereWithAggregatesInput = {
   additionalNotes?: Prisma.StringNullableWithAggregatesFilter<"BusinessOrder"> | string | null
   logoUpload?: Prisma.StringNullableWithAggregatesFilter<"BusinessOrder"> | string | null
   businessImages?: Prisma.StringNullableListFilter<"BusinessOrder">
+  status?: Prisma.StringWithAggregatesFilter<"BusinessOrder"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BusinessOrder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BusinessOrder"> | Date | string
 }
@@ -394,6 +406,7 @@ export type BusinessOrderCreateInput = {
   additionalNotes?: string | null
   logoUpload?: string | null
   businessImages?: Prisma.BusinessOrderCreatebusinessImagesInput | string[]
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -415,6 +428,7 @@ export type BusinessOrderUncheckedCreateInput = {
   additionalNotes?: string | null
   logoUpload?: string | null
   businessImages?: Prisma.BusinessOrderCreatebusinessImagesInput | string[]
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -436,6 +450,7 @@ export type BusinessOrderUpdateInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUpload?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessImages?: Prisma.BusinessOrderUpdatebusinessImagesInput | string[]
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -457,6 +472,7 @@ export type BusinessOrderUncheckedUpdateInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUpload?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessImages?: Prisma.BusinessOrderUpdatebusinessImagesInput | string[]
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -478,6 +494,7 @@ export type BusinessOrderCreateManyInput = {
   additionalNotes?: string | null
   logoUpload?: string | null
   businessImages?: Prisma.BusinessOrderCreatebusinessImagesInput | string[]
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -499,6 +516,7 @@ export type BusinessOrderUpdateManyMutationInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUpload?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessImages?: Prisma.BusinessOrderUpdatebusinessImagesInput | string[]
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -520,6 +538,7 @@ export type BusinessOrderUncheckedUpdateManyInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUpload?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessImages?: Prisma.BusinessOrderUpdatebusinessImagesInput | string[]
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -541,6 +560,7 @@ export type BusinessOrderCountOrderByAggregateInput = {
   additionalNotes?: Prisma.SortOrder
   logoUpload?: Prisma.SortOrder
   businessImages?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -561,6 +581,7 @@ export type BusinessOrderMaxOrderByAggregateInput = {
   socialLinks?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrder
   logoUpload?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -581,6 +602,7 @@ export type BusinessOrderMinOrderByAggregateInput = {
   socialLinks?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrder
   logoUpload?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -613,6 +635,7 @@ export type BusinessOrderSelect<ExtArgs extends runtime.Types.Extensions.Interna
   additionalNotes?: boolean
   logoUpload?: boolean
   businessImages?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["businessOrder"]>
@@ -634,6 +657,7 @@ export type BusinessOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   additionalNotes?: boolean
   logoUpload?: boolean
   businessImages?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["businessOrder"]>
@@ -655,6 +679,7 @@ export type BusinessOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   additionalNotes?: boolean
   logoUpload?: boolean
   businessImages?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["businessOrder"]>
@@ -676,11 +701,12 @@ export type BusinessOrderSelectScalar = {
   additionalNotes?: boolean
   logoUpload?: boolean
   businessImages?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BusinessOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderCode" | "businessName" | "ownerName" | "email" | "phone" | "address" | "businessType" | "productCategories" | "websiteFeatures" | "preferredDomain" | "designStyle" | "socialLinks" | "additionalNotes" | "logoUpload" | "businessImages" | "createdAt" | "updatedAt", ExtArgs["result"]["businessOrder"]>
+export type BusinessOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderCode" | "businessName" | "ownerName" | "email" | "phone" | "address" | "businessType" | "productCategories" | "websiteFeatures" | "preferredDomain" | "designStyle" | "socialLinks" | "additionalNotes" | "logoUpload" | "businessImages" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["businessOrder"]>
 
 export type $BusinessOrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BusinessOrder"
@@ -702,6 +728,7 @@ export type $BusinessOrderPayload<ExtArgs extends runtime.Types.Extensions.Inter
     additionalNotes: string | null
     logoUpload: string | null
     businessImages: string[]
+    status: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["businessOrder"]>
@@ -1143,6 +1170,7 @@ export interface BusinessOrderFieldRefs {
   readonly additionalNotes: Prisma.FieldRef<"BusinessOrder", 'String'>
   readonly logoUpload: Prisma.FieldRef<"BusinessOrder", 'String'>
   readonly businessImages: Prisma.FieldRef<"BusinessOrder", 'String[]'>
+  readonly status: Prisma.FieldRef<"BusinessOrder", 'String'>
   readonly createdAt: Prisma.FieldRef<"BusinessOrder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BusinessOrder", 'DateTime'>
 }

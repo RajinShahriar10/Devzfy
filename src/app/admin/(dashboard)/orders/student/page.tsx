@@ -62,6 +62,7 @@ interface StudentOrder {
   awards: StudentAward[];
   certificates: StudentCertificate[];
   research: StudentResearch[];
+  status: string;
 }
 
 export default function AdminStudentOrders() {
@@ -69,6 +70,7 @@ export default function AdminStudentOrders() {
   const [search, setSearch] = useState("");
   const [viewing, setViewing] = useState<StudentOrder | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   async function fetchOrders(q = "") {
@@ -109,6 +111,26 @@ export default function AdminStudentOrders() {
     navigator.clipboard.writeText(code);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  }
+
+  async function updateStatus(id: string, status: string) {
+    setUpdatingId(id);
+    try {
+      const res = await fetch(`/api/orders/student/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(orders.map((o) => (o.id === id ? { ...o, status } : o)));
+        if (viewing?.id === id) setViewing({ ...viewing, status });
+      }
+    } catch {
+      console.error("Failed to update order");
+    } finally {
+      setUpdatingId(null);
+    }
   }
 
   function downloadDataURL(dataURL: string, filename: string) {
@@ -161,9 +183,18 @@ export default function AdminStudentOrders() {
           {orders.map((order) => (
             <GlassCard key={order.id} hover={false}>
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center shrink-0 overflow-hidden group relative">
                   {order.profileImage ? (
-                    <img src={order.profileImage} alt="" className="h-full w-full object-cover" />
+                    <>
+                      <img src={order.profileImage} alt="" className="h-full w-full object-cover" />
+                      <button
+                        onClick={() => downloadDataURL(order.profileImage!, `${order.fullName}-profile`)}
+                        className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Download profile image"
+                      >
+                        <Download className="h-4 w-4 text-white" />
+                      </button>
+                    </>
                   ) : (
                     <User className="h-5 w-5 text-purple-400" />
                   )}
@@ -174,8 +205,23 @@ export default function AdminStudentOrders() {
                     <Badge variant="secondary" className="text-xs font-mono">
                       {order.orderCode}
                     </Badge>
+                    <Badge className={`text-xs ${order.status === "Delivered" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                      {order.status}
+                    </Badge>
                   </div>
                   <p className="text-sm text-gray-400 mt-0.5">{order.email}</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    {order.githubUrl && (
+                      <a href={order.githubUrl} target="_blank" className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                        <ExternalLink className="h-3 w-3" /> GitHub
+                      </a>
+                    )}
+                    {order.linkedinUrl && (
+                      <a href={order.linkedinUrl} target="_blank" className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                        <ExternalLink className="h-3 w-3" /> LinkedIn
+                      </a>
+                    )}
+                  </div>
                   <p className="text-xs text-gray-500 mt-1">
                     {formatDate(new Date(order.createdAt))}
                   </p>
@@ -232,9 +278,18 @@ export default function AdminStudentOrders() {
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center overflow-hidden">
+                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center shrink-0 overflow-hidden group relative">
                     {viewing.profileImage ? (
-                      <img src={viewing.profileImage} alt="" className="h-full w-full object-cover" />
+                      <>
+                        <img src={viewing.profileImage} alt="" className="h-full w-full object-cover" />
+                        <button
+                          onClick={() => downloadDataURL(viewing.profileImage!, `${viewing.fullName}-profile`)}
+                          className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+                          title="Download profile image"
+                        >
+                          <Download className="h-4 w-4 text-white" />
+                        </button>
+                      </>
                     ) : (
                       <User className="h-5 w-5 text-purple-400" />
                     )}
@@ -252,6 +307,36 @@ export default function AdminStudentOrders() {
               </div>
 
               <div className="space-y-6">
+                {/* Status */}
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <User className="h-4 w-4" /> Order Status
+                  </h3>
+                  <div className="flex items-center gap-3">
+                    <Badge className={`text-sm px-3 py-1 ${viewing.status === "Delivered" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                      {viewing.status}
+                    </Badge>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={updatingId === viewing.id || viewing.status === "pending"}
+                        onClick={() => updateStatus(viewing.id, "pending")}
+                      >
+                        Mark Pending
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={updatingId === viewing.id || viewing.status === "Delivered"}
+                        onClick={() => updateStatus(viewing.id, "Delivered")}
+                      >
+                        Mark Delivered
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Personal Information */}
                 <div>
                   <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -273,13 +358,13 @@ export default function AdminStudentOrders() {
                     </h3>
                     <div className="space-y-2">
                       {viewing.githubUrl && (
-                        <a href={viewing.githubUrl} target="_blank" className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300">
-                          <ExternalLink className="h-3.5 w-3.5" /> GitHub
+                        <a href={viewing.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 break-all">
+                          <ExternalLink className="h-3.5 w-3.5 shrink-0" /> {viewing.githubUrl}
                         </a>
                       )}
                       {viewing.linkedinUrl && (
-                        <a href={viewing.linkedinUrl} target="_blank" className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300">
-                          <ExternalLink className="h-3.5 w-3.5" /> LinkedIn
+                        <a href={viewing.linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 break-all">
+                          <ExternalLink className="h-3.5 w-3.5 shrink-0" /> {viewing.linkedinUrl}
                         </a>
                       )}
                     </div>

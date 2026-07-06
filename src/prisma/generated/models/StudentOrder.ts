@@ -43,6 +43,7 @@ export type StudentOrderMinAggregateOutputType = {
   duration: string | null
   experienceDescription: string | null
   additionalNotes: string | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +67,7 @@ export type StudentOrderMaxAggregateOutputType = {
   duration: string | null
   experienceDescription: string | null
   additionalNotes: string | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -91,6 +93,7 @@ export type StudentOrderCountAggregateOutputType = {
   skills: number
   activities: number
   additionalNotes: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -116,6 +119,7 @@ export type StudentOrderMinAggregateInputType = {
   duration?: true
   experienceDescription?: true
   additionalNotes?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -139,6 +143,7 @@ export type StudentOrderMaxAggregateInputType = {
   duration?: true
   experienceDescription?: true
   additionalNotes?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -164,6 +169,7 @@ export type StudentOrderCountAggregateInputType = {
   skills?: true
   activities?: true
   additionalNotes?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -262,6 +268,7 @@ export type StudentOrderGroupByOutputType = {
   skills: string[]
   activities: string[]
   additionalNotes: string | null
+  status: string
   createdAt: Date
   updatedAt: Date
   _count: StudentOrderCountAggregateOutputType | null
@@ -308,6 +315,7 @@ export type StudentOrderWhereInput = {
   skills?: Prisma.StringNullableListFilter<"StudentOrder">
   activities?: Prisma.StringNullableListFilter<"StudentOrder">
   additionalNotes?: Prisma.StringNullableFilter<"StudentOrder"> | string | null
+  status?: Prisma.StringFilter<"StudentOrder"> | string
   createdAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
   awards?: Prisma.StudentAwardListRelationFilter
@@ -336,6 +344,7 @@ export type StudentOrderOrderByWithRelationInput = {
   skills?: Prisma.SortOrder
   activities?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   awards?: Prisma.StudentAwardOrderByRelationAggregateInput
@@ -367,6 +376,7 @@ export type StudentOrderWhereUniqueInput = Prisma.AtLeast<{
   skills?: Prisma.StringNullableListFilter<"StudentOrder">
   activities?: Prisma.StringNullableListFilter<"StudentOrder">
   additionalNotes?: Prisma.StringNullableFilter<"StudentOrder"> | string | null
+  status?: Prisma.StringFilter<"StudentOrder"> | string
   createdAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
   awards?: Prisma.StudentAwardListRelationFilter
@@ -395,6 +405,7 @@ export type StudentOrderOrderByWithAggregationInput = {
   skills?: Prisma.SortOrder
   activities?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StudentOrderCountOrderByAggregateInput
@@ -426,6 +437,7 @@ export type StudentOrderScalarWhereWithAggregatesInput = {
   skills?: Prisma.StringNullableListFilter<"StudentOrder">
   activities?: Prisma.StringNullableListFilter<"StudentOrder">
   additionalNotes?: Prisma.StringNullableWithAggregatesFilter<"StudentOrder"> | string | null
+  status?: Prisma.StringWithAggregatesFilter<"StudentOrder"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StudentOrder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"StudentOrder"> | Date | string
 }
@@ -451,6 +463,7 @@ export type StudentOrderCreateInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
@@ -479,6 +492,7 @@ export type StudentOrderUncheckedCreateInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
@@ -507,6 +521,7 @@ export type StudentOrderUpdateInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
@@ -535,6 +550,7 @@ export type StudentOrderUncheckedUpdateInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
@@ -563,6 +579,7 @@ export type StudentOrderCreateManyInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -588,6 +605,7 @@ export type StudentOrderUpdateManyMutationInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -613,6 +631,7 @@ export type StudentOrderUncheckedUpdateManyInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -638,6 +657,7 @@ export type StudentOrderCountOrderByAggregateInput = {
   skills?: Prisma.SortOrder
   activities?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -661,6 +681,7 @@ export type StudentOrderMaxOrderByAggregateInput = {
   duration?: Prisma.SortOrder
   experienceDescription?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -684,6 +705,7 @@ export type StudentOrderMinOrderByAggregateInput = {
   duration?: Prisma.SortOrder
   experienceDescription?: Prisma.SortOrder
   additionalNotes?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -774,6 +796,7 @@ export type StudentOrderCreateWithoutAwardsInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   certificates?: Prisma.StudentCertificateCreateNestedManyWithoutOrderInput
@@ -801,6 +824,7 @@ export type StudentOrderUncheckedCreateWithoutAwardsInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   certificates?: Prisma.StudentCertificateUncheckedCreateNestedManyWithoutOrderInput
@@ -844,6 +868,7 @@ export type StudentOrderUpdateWithoutAwardsInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   certificates?: Prisma.StudentCertificateUpdateManyWithoutOrderNestedInput
@@ -871,6 +896,7 @@ export type StudentOrderUncheckedUpdateWithoutAwardsInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   certificates?: Prisma.StudentCertificateUncheckedUpdateManyWithoutOrderNestedInput
@@ -898,6 +924,7 @@ export type StudentOrderCreateWithoutCertificatesInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
@@ -925,6 +952,7 @@ export type StudentOrderUncheckedCreateWithoutCertificatesInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
@@ -968,6 +996,7 @@ export type StudentOrderUpdateWithoutCertificatesInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
@@ -995,6 +1024,7 @@ export type StudentOrderUncheckedUpdateWithoutCertificatesInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
@@ -1022,6 +1052,7 @@ export type StudentOrderCreateWithoutResearchInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
@@ -1049,6 +1080,7 @@ export type StudentOrderUncheckedCreateWithoutResearchInput = {
   skills?: Prisma.StudentOrderCreateskillsInput | string[]
   activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
   additionalNotes?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
@@ -1092,6 +1124,7 @@ export type StudentOrderUpdateWithoutResearchInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
@@ -1119,6 +1152,7 @@ export type StudentOrderUncheckedUpdateWithoutResearchInput = {
   skills?: Prisma.StudentOrderUpdateskillsInput | string[]
   activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
@@ -1195,6 +1229,7 @@ export type StudentOrderSelect<ExtArgs extends runtime.Types.Extensions.Internal
   skills?: boolean
   activities?: boolean
   additionalNotes?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   awards?: boolean | Prisma.StudentOrder$awardsArgs<ExtArgs>
@@ -1224,6 +1259,7 @@ export type StudentOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   skills?: boolean
   activities?: boolean
   additionalNotes?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["studentOrder"]>
@@ -1249,6 +1285,7 @@ export type StudentOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   skills?: boolean
   activities?: boolean
   additionalNotes?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["studentOrder"]>
@@ -1274,11 +1311,12 @@ export type StudentOrderSelectScalar = {
   skills?: boolean
   activities?: boolean
   additionalNotes?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StudentOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderCode" | "fullName" | "profileImage" | "address" | "email" | "phone" | "githubUrl" | "linkedinUrl" | "degree" | "institution" | "educationStartDate" | "educationEndDate" | "company" | "position" | "duration" | "experienceDescription" | "skills" | "activities" | "additionalNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["studentOrder"]>
+export type StudentOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderCode" | "fullName" | "profileImage" | "address" | "email" | "phone" | "githubUrl" | "linkedinUrl" | "degree" | "institution" | "educationStartDate" | "educationEndDate" | "company" | "position" | "duration" | "experienceDescription" | "skills" | "activities" | "additionalNotes" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["studentOrder"]>
 export type StudentOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   awards?: boolean | Prisma.StudentOrder$awardsArgs<ExtArgs>
   certificates?: boolean | Prisma.StudentOrder$certificatesArgs<ExtArgs>
@@ -1316,6 +1354,7 @@ export type $StudentOrderPayload<ExtArgs extends runtime.Types.Extensions.Intern
     skills: string[]
     activities: string[]
     additionalNotes: string | null
+    status: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["studentOrder"]>
@@ -1764,6 +1803,7 @@ export interface StudentOrderFieldRefs {
   readonly skills: Prisma.FieldRef<"StudentOrder", 'String[]'>
   readonly activities: Prisma.FieldRef<"StudentOrder", 'String[]'>
   readonly additionalNotes: Prisma.FieldRef<"StudentOrder", 'String'>
+  readonly status: Prisma.FieldRef<"StudentOrder", 'String'>
   readonly createdAt: Prisma.FieldRef<"StudentOrder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"StudentOrder", 'DateTime'>
 }

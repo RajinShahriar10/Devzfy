@@ -1703,6 +1703,7 @@ export const StudentOrderScalarFieldEnum = {
   skills: 'skills',
   activities: 'activities',
   additionalNotes: 'additionalNotes',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1713,6 +1714,7 @@ export type StudentOrderScalarFieldEnum = (typeof StudentOrderScalarFieldEnum)[k
 export const StudentAwardScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  competition: 'competition',
   date: 'date',
   image: 'image',
   orderId: 'orderId',
@@ -1765,6 +1767,7 @@ export const BusinessOrderScalarFieldEnum = {
   additionalNotes: 'additionalNotes',
   logoUpload: 'logoUpload',
   businessImages: 'businessImages',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

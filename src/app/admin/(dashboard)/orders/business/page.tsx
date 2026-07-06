@@ -31,6 +31,7 @@ interface BusinessOrder {
   logoUpload: string | null;
   businessImages: string[];
   createdAt: string;
+  status: string;
 }
 
 export default function AdminBusinessOrders() {
@@ -38,6 +39,7 @@ export default function AdminBusinessOrders() {
   const [search, setSearch] = useState("");
   const [viewing, setViewing] = useState<BusinessOrder | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   async function fetchOrders(q = "") {
@@ -80,6 +82,26 @@ export default function AdminBusinessOrders() {
     navigator.clipboard.writeText(code);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  }
+
+  async function updateStatus(id: string, status: string) {
+    setUpdatingId(id);
+    try {
+      const res = await fetch(`/api/orders/business/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(orders.map((o) => (o.id === id ? { ...o, status } : o)));
+        if (viewing?.id === id) setViewing({ ...viewing, status });
+      }
+    } catch {
+      console.error("Failed to update order");
+    } finally {
+      setUpdatingId(null);
+    }
   }
 
   function downloadDataURL(dataURL: string, filename: string) {
@@ -153,6 +175,9 @@ export default function AdminBusinessOrders() {
                     <h3 className="font-semibold">{order.businessName}</h3>
                     <Badge variant="secondary" className="text-xs font-mono">
                       {order.orderCode}
+                    </Badge>
+                    <Badge className={`text-xs ${order.status === "Delivered" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                      {order.status}
                     </Badge>
                   </div>
                   <p className="text-sm text-gray-400 mt-0.5">{order.ownerName} &middot; {order.email}</p>
@@ -232,6 +257,35 @@ export default function AdminBusinessOrders() {
               </div>
 
               <div className="space-y-6">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <User className="h-4 w-4" /> Order Status
+                  </h3>
+                  <div className="flex items-center gap-3">
+                    <Badge className={`text-sm px-3 py-1 ${viewing.status === "Delivered" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                      {viewing.status}
+                    </Badge>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={updatingId === viewing.id || viewing.status === "pending"}
+                        onClick={() => updateStatus(viewing.id, "pending")}
+                      >
+                        Mark Pending
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={updatingId === viewing.id || viewing.status === "Delivered"}
+                        onClick={() => updateStatus(viewing.id, "Delivered")}
+                      >
+                        Mark Delivered
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
                 <div>
                   <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <User className="h-4 w-4" /> Business Information

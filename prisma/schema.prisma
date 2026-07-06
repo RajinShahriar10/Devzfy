@@ -126,6 +126,8 @@ model StudentOrder {
 
   additionalNotes   String?
 
+  status      String   @default("pending")
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -185,6 +187,8 @@ model BusinessOrder {
   additionalNotes       String?
   logoUpload            String?
   businessImages        String[]
+
+  status      String   @default("pending")
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
