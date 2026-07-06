@@ -119,7 +119,7 @@ export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<S
 
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400 flex items-center gap-1">
-            &copy; {new Date().getFullYear()} Devzfy. Made with <Heart className="h-3 w-3 text-red-500 fill-red-500" /> All rights reserved.
+            &copy; {new Date().getFullYear()} Devzfy. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <div className="flex gap-6">
