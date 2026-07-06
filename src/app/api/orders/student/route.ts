@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
       where,
       orderBy: { createdAt: "desc" },
       include: {
+        projects: true,
         awards: true,
         certificates: true,
         research: true,
@@ -74,6 +75,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    if (body.projects && Array.isArray(body.projects)) {
+      await prisma.studentProject.createMany({
+        data: body.projects.map((p: { name: string; techUsed?: string[]; date?: string; liveUrl?: string; images?: string[] }) => ({
+          ...p, techUsed: p.techUsed || [], images: p.images || [], orderId: order.id,
+        })),
+      });
+    }
     if (body.awards && Array.isArray(body.awards)) {
       await prisma.studentAward.createMany({
         data: body.awards.map((a: { name: string; competition?: string; date?: string; image?: string }) => ({ ...a, orderId: order.id })),

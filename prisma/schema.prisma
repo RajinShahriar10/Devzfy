@@ -131,9 +131,22 @@ model StudentOrder {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  projects     StudentProject[]
   awards       StudentAward[]
   certificates StudentCertificate[]
   research     StudentResearch[]
+}
+
+model StudentProject {
+  id          String   @id @default(cuid())
+  name        String
+  techUsed    String[]
+  date        String?
+  liveUrl     String?
+  images      String[]
+  orderId     String
+  order       StudentOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 }
 
 model StudentAward {

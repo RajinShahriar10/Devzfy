@@ -60,6 +60,7 @@ export const ModelName = {
   Testimonial: 'Testimonial',
   Technology: 'Technology',
   StudentOrder: 'StudentOrder',
+  StudentProject: 'StudentProject',
   StudentAward: 'StudentAward',
   StudentCertificate: 'StudentCertificate',
   StudentResearch: 'StudentResearch',
@@ -226,6 +227,20 @@ export const StudentOrderScalarFieldEnum = {
 } as const
 
 export type StudentOrderScalarFieldEnum = (typeof StudentOrderScalarFieldEnum)[keyof typeof StudentOrderScalarFieldEnum]
+
+
+export const StudentProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  techUsed: 'techUsed',
+  date: 'date',
+  liveUrl: 'liveUrl',
+  images: 'images',
+  orderId: 'orderId',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentProjectScalarFieldEnum = (typeof StudentProjectScalarFieldEnum)[keyof typeof StudentProjectScalarFieldEnum]
 
 
 export const StudentAwardScalarFieldEnum = {

@@ -63,6 +63,11 @@ export type Technology = Prisma.TechnologyModel
  */
 export type StudentOrder = Prisma.StudentOrderModel
 /**
+ * Model StudentProject
+ * 
+ */
+export type StudentProject = Prisma.StudentProjectModel
+/**
  * Model StudentAward
  * 
  */

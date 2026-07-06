@@ -14,6 +14,15 @@ import {
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
+interface StudentProject {
+  id: string;
+  name: string;
+  techUsed: string[];
+  date: string | null;
+  liveUrl: string | null;
+  images: string[];
+}
+
 interface StudentAward {
   id: string;
   name: string;
@@ -63,6 +72,7 @@ interface StudentOrder {
   certificates: StudentCertificate[];
   research: StudentResearch[];
   status: string;
+  projects: StudentProject[];
 }
 
 export default function AdminStudentOrders() {
@@ -133,6 +143,21 @@ export default function AdminStudentOrders() {
     }
   }
 
+  async function downloadImage(url: string, filename: string) {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const ext = blob.type === "image/jpeg" ? "jpg" : blob.type.split("/")[1] || "jpg";
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${filename}.${ext}`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch {
+      console.error("Failed to download image");
+    }
+  }
+
   function downloadDataURL(dataURL: string, filename: string) {
     const a = document.createElement("a");
     a.href = dataURL;
@@ -188,7 +213,7 @@ export default function AdminStudentOrders() {
                     <>
                       <img src={order.profileImage} alt="" className="h-full w-full object-cover" />
                       <button
-                        onClick={() => downloadDataURL(order.profileImage!, `${order.fullName}-profile`)}
+                        onClick={() => downloadImage(order.profileImage!, `${order.fullName}-profile`)}
                         className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         title="Download profile image"
                       >
@@ -283,7 +308,7 @@ export default function AdminStudentOrders() {
                       <>
                         <img src={viewing.profileImage} alt="" className="h-full w-full object-cover" />
                         <button
-                          onClick={() => downloadDataURL(viewing.profileImage!, `${viewing.fullName}-profile`)}
+                          onClick={() => downloadImage(viewing.profileImage!, `${viewing.fullName}-profile`)}
                           className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
                           title="Download profile image"
                         >
@@ -410,6 +435,51 @@ export default function AdminStudentOrders() {
                     <div className="flex flex-wrap gap-2">
                       {viewing.skills.map((s) => (
                         <Badge key={s} variant="secondary">{s}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Projects */}
+                {viewing.projects.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Briefcase className="h-4 w-4" /> Projects
+                    </h3>
+                    <div className="space-y-3">
+                      {viewing.projects.map((proj, i) => (
+                        <div key={proj.id} className="glass rounded-lg p-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-200">#{i + 1} {proj.name}</p>
+                          {proj.techUsed.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {proj.techUsed.map((t) => (
+                                <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>
+                              ))}
+                            </div>
+                          )}
+                          {proj.date && <p className="text-xs text-gray-400">Date: {proj.date}</p>}
+                          {proj.liveUrl && (
+                            <a href={proj.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300">
+                              <ExternalLink className="h-3 w-3" /> Live URL
+                            </a>
+                          )}
+                          {proj.images.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {proj.images.map((img, idx) => (
+                                <div key={idx} className="h-16 w-16 rounded-lg overflow-hidden border border-white/10 group relative">
+                                  <img src={img} alt="" className="h-full w-full object-cover" />
+                                  <button
+                                    onClick={() => downloadImage(img, `${proj.name}-image-${idx + 1}`)}
+                                    className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    title="Download image"
+                                  >
+                                    <Download className="h-4 w-4 text-white" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>

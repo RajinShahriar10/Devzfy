@@ -29,6 +29,15 @@ interface ExperienceEntry {
   description: string;
 }
 
+interface ProjectEntry {
+  id: string;
+  name: string;
+  techUsed: string;
+  date: string;
+  liveUrl: string;
+  images: string[];
+}
+
 interface AwardEntry {
   id: string;
   name: string;
@@ -55,6 +64,7 @@ interface ResearchEntry {
 
 const emptyEducation = (): EducationEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), degree: "", institution: "", startDate: "", endDate: "" });
 const emptyExperience = (): ExperienceEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), company: "", position: "", duration: "", description: "" });
+const emptyProject = (): ProjectEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", techUsed: "", date: "", liveUrl: "", images: [] });
 const emptyAward = (): AwardEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", competition: "", date: "", image: "" });
 const emptyCertificate = (): CertificateEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), name: "", date: "", file: "" });
 const emptyResearch = (): ResearchEntry => ({ id: crypto.randomUUID?.() || String(Date.now()), title: "", role: "", date: "", conference: "", publicationUrl: "" });
@@ -77,6 +87,7 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
   const [experiences, setExperiences] = useState<ExperienceEntry[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
+  const [projects, setProjects] = useState<ProjectEntry[]>([]);
   const [awards, setAwards] = useState<AwardEntry[]>([]);
   const [activities, setActivities] = useState<DynamicEntry[]>([]);
   const [activityInput, setActivityInput] = useState("");
@@ -84,7 +95,7 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
   const [research, setResearch] = useState<ResearchEntry[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState("");
 
-  const totalSteps = 8;
+  const totalSteps = 9;
 
   function addSkill() {
     if (!skillInput.trim()) return;
@@ -117,6 +128,29 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
   function removeExperience(id: string) { setExperiences(experiences.filter((e) => e.id !== id)); }
   function updateExperience(id: string, field: keyof ExperienceEntry, value: string) {
     setExperiences(experiences.map((e) => e.id === id ? { ...e, [field]: value } : e));
+  }
+
+  function addProject() { setProjects([...projects, emptyProject()]); }
+  function removeProject(id: string) { setProjects(projects.filter((p) => p.id !== id)); }
+  function updateProject(id: string, field: keyof ProjectEntry, value: string | string[]) {
+    setProjects(projects.map((p) => p.id === id ? { ...p, [field]: value } : p));
+  }
+
+  function handleProjectImages(id: string) {
+    return async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (!files) return;
+      const newImages: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        newImages.push(await readFileAsDataURL(files[i]));
+      }
+      const project = projects.find((p) => p.id === id);
+      setProjects(projects.map((p) => p.id === id ? { ...p, images: [...(project?.images || []), ...newImages] } : p));
+    };
+  }
+
+  function removeProjectImage(projectId: string, imageIndex: number) {
+    setProjects(projects.map((p) => p.id === projectId ? { ...p, images: p.images.filter((_, i) => i !== imageIndex) } : p));
   }
 
   function addAward() { setAwards([...awards, emptyAward()]); }
@@ -187,6 +221,9 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
       experiences: experiences.map(({ id, company, position, duration, description }) => ({
         company, position, duration, experienceDescription: description,
       })),
+      projects: projects.map(({ id, name, techUsed, date, liveUrl, images }) => ({
+        name, techUsed: techUsed ? techUsed.split(",").map((t) => t.trim()).filter(Boolean) : [], date: date || null, liveUrl: liveUrl || null, images,
+      })),
       awards: awards.map(({ id, name, competition, date, image }) => ({ name, competition: competition || null, date: date || null, image: image || null })),
       certificates: certificates.map(({ id, name, date, file }) => ({ name, date: date || null, file: file || null })),
       research: research.map(({ id, title, role, date, conference, publicationUrl }) => ({
@@ -229,6 +266,7 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
     setEducations([]);
     setExperiences([]);
     setSkills([]);
+    setProjects([]);
     setAwards([]);
     setActivities([]);
     setCertificates([]);
@@ -417,6 +455,69 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
         );
       case 6:
         return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gradient">Projects</h3>
+              <Button type="button" variant="secondary" size="sm" onClick={addProject}>
+                <Plus className="h-4 w-4 mr-1" /> Add Project
+              </Button>
+            </div>
+            {projects.length === 0 && (
+              <p className="text-sm text-gray-500">No projects added.</p>
+            )}
+            {projects.map((proj, i) => (
+              <div key={proj.id} className="glass rounded-xl p-4 space-y-3 relative mb-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-purple-400">Project #{i + 1}</span>
+                  <button type="button" onClick={() => removeProject(proj.id)} className="text-gray-400 hover:text-red-400">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Project Name</label>
+                    <Input value={proj.name} onChange={(e) => updateProject(proj.id, "name", e.target.value)} className={inputClass} placeholder="Project title" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Technologies Used</label>
+                    <Input value={proj.techUsed} onChange={(e) => updateProject(proj.id, "techUsed", e.target.value)} className={inputClass} placeholder="e.g. React, Node.js, MongoDB" />
+                    <span className="text-xs text-gray-500 mt-1">Separate technologies with commas</span>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Date</label>
+                    <Input type="date" value={proj.date} onChange={(e) => updateProject(proj.id, "date", e.target.value)} className={inputClass} />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Live URL</label>
+                    <Input value={proj.liveUrl} onChange={(e) => updateProject(proj.id, "liveUrl", e.target.value)} className={inputClass} placeholder="https://your-project.com" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs text-gray-400 mb-1 block">Project Images</label>
+                    <Input type="file" accept="image/*" multiple className={fileInputClass} onChange={handleProjectImages(proj.id)} />
+                    {proj.images.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {proj.images.map((img, idx) => (
+                          <div key={idx} className="relative group h-16 w-16 rounded-lg overflow-hidden border border-white/10">
+                            <img src={img} alt="" className="h-full w-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => removeProjectImage(proj.id, idx)}
+                              className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <Trash2 className="h-4 w-4 text-red-400" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      case 7:
+        return (
           <div className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -489,7 +590,7 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
             </div>
           </div>
         );
-      case 7:
+      case 8:
         return (
           <div className="space-y-6">
             <div>
@@ -576,7 +677,7 @@ export function StudentOrderForm({ open, onClose }: { open: boolean; onClose: ()
             </div>
           </div>
         );
-      case 8:
+      case 9:
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gradient">Additional Notes</h3>

@@ -318,6 +318,7 @@ export type StudentOrderWhereInput = {
   status?: Prisma.StringFilter<"StudentOrder"> | string
   createdAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
+  projects?: Prisma.StudentProjectListRelationFilter
   awards?: Prisma.StudentAwardListRelationFilter
   certificates?: Prisma.StudentCertificateListRelationFilter
   research?: Prisma.StudentResearchListRelationFilter
@@ -347,6 +348,7 @@ export type StudentOrderOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  projects?: Prisma.StudentProjectOrderByRelationAggregateInput
   awards?: Prisma.StudentAwardOrderByRelationAggregateInput
   certificates?: Prisma.StudentCertificateOrderByRelationAggregateInput
   research?: Prisma.StudentResearchOrderByRelationAggregateInput
@@ -379,6 +381,7 @@ export type StudentOrderWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"StudentOrder"> | string
   createdAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentOrder"> | Date | string
+  projects?: Prisma.StudentProjectListRelationFilter
   awards?: Prisma.StudentAwardListRelationFilter
   certificates?: Prisma.StudentCertificateListRelationFilter
   research?: Prisma.StudentResearchListRelationFilter
@@ -466,6 +469,7 @@ export type StudentOrderCreateInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectCreateNestedManyWithoutOrderInput
   awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
   certificates?: Prisma.StudentCertificateCreateNestedManyWithoutOrderInput
   research?: Prisma.StudentResearchCreateNestedManyWithoutOrderInput
@@ -495,6 +499,7 @@ export type StudentOrderUncheckedCreateInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectUncheckedCreateNestedManyWithoutOrderInput
   awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
   certificates?: Prisma.StudentCertificateUncheckedCreateNestedManyWithoutOrderInput
   research?: Prisma.StudentResearchUncheckedCreateNestedManyWithoutOrderInput
@@ -524,6 +529,7 @@ export type StudentOrderUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUpdateManyWithoutOrderNestedInput
   awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
   certificates?: Prisma.StudentCertificateUpdateManyWithoutOrderNestedInput
   research?: Prisma.StudentResearchUpdateManyWithoutOrderNestedInput
@@ -553,6 +559,7 @@ export type StudentOrderUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUncheckedUpdateManyWithoutOrderNestedInput
   awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
   certificates?: Prisma.StudentCertificateUncheckedUpdateManyWithoutOrderNestedInput
   research?: Prisma.StudentResearchUncheckedUpdateManyWithoutOrderNestedInput
@@ -733,6 +740,20 @@ export type StudentOrderUpdateactivitiesInput = {
   push?: string | string[]
 }
 
+export type StudentOrderCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<Prisma.StudentOrderCreateWithoutProjectsInput, Prisma.StudentOrderUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.StudentOrderCreateOrConnectWithoutProjectsInput
+  connect?: Prisma.StudentOrderWhereUniqueInput
+}
+
+export type StudentOrderUpdateOneRequiredWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentOrderCreateWithoutProjectsInput, Prisma.StudentOrderUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.StudentOrderCreateOrConnectWithoutProjectsInput
+  upsert?: Prisma.StudentOrderUpsertWithoutProjectsInput
+  connect?: Prisma.StudentOrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StudentOrderUpdateToOneWithWhereWithoutProjectsInput, Prisma.StudentOrderUpdateWithoutProjectsInput>, Prisma.StudentOrderUncheckedUpdateWithoutProjectsInput>
+}
+
 export type StudentOrderCreateNestedOneWithoutAwardsInput = {
   create?: Prisma.XOR<Prisma.StudentOrderCreateWithoutAwardsInput, Prisma.StudentOrderUncheckedCreateWithoutAwardsInput>
   connectOrCreate?: Prisma.StudentOrderCreateOrConnectWithoutAwardsInput
@@ -775,6 +796,138 @@ export type StudentOrderUpdateOneRequiredWithoutResearchNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StudentOrderUpdateToOneWithWhereWithoutResearchInput, Prisma.StudentOrderUpdateWithoutResearchInput>, Prisma.StudentOrderUncheckedUpdateWithoutResearchInput>
 }
 
+export type StudentOrderCreateWithoutProjectsInput = {
+  id?: string
+  orderCode: string
+  fullName: string
+  profileImage?: string | null
+  address?: string | null
+  email: string
+  phone?: string | null
+  githubUrl?: string | null
+  linkedinUrl?: string | null
+  degree?: string | null
+  institution?: string | null
+  educationStartDate?: string | null
+  educationEndDate?: string | null
+  company?: string | null
+  position?: string | null
+  duration?: string | null
+  experienceDescription?: string | null
+  skills?: Prisma.StudentOrderCreateskillsInput | string[]
+  activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
+  additionalNotes?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
+  certificates?: Prisma.StudentCertificateCreateNestedManyWithoutOrderInput
+  research?: Prisma.StudentResearchCreateNestedManyWithoutOrderInput
+}
+
+export type StudentOrderUncheckedCreateWithoutProjectsInput = {
+  id?: string
+  orderCode: string
+  fullName: string
+  profileImage?: string | null
+  address?: string | null
+  email: string
+  phone?: string | null
+  githubUrl?: string | null
+  linkedinUrl?: string | null
+  degree?: string | null
+  institution?: string | null
+  educationStartDate?: string | null
+  educationEndDate?: string | null
+  company?: string | null
+  position?: string | null
+  duration?: string | null
+  experienceDescription?: string | null
+  skills?: Prisma.StudentOrderCreateskillsInput | string[]
+  activities?: Prisma.StudentOrderCreateactivitiesInput | string[]
+  additionalNotes?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
+  certificates?: Prisma.StudentCertificateUncheckedCreateNestedManyWithoutOrderInput
+  research?: Prisma.StudentResearchUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type StudentOrderCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.StudentOrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.StudentOrderCreateWithoutProjectsInput, Prisma.StudentOrderUncheckedCreateWithoutProjectsInput>
+}
+
+export type StudentOrderUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<Prisma.StudentOrderUpdateWithoutProjectsInput, Prisma.StudentOrderUncheckedUpdateWithoutProjectsInput>
+  create: Prisma.XOR<Prisma.StudentOrderCreateWithoutProjectsInput, Prisma.StudentOrderUncheckedCreateWithoutProjectsInput>
+  where?: Prisma.StudentOrderWhereInput
+}
+
+export type StudentOrderUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.StudentOrderWhereInput
+  data: Prisma.XOR<Prisma.StudentOrderUpdateWithoutProjectsInput, Prisma.StudentOrderUncheckedUpdateWithoutProjectsInput>
+}
+
+export type StudentOrderUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderCode?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationStartDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationEndDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skills?: Prisma.StudentOrderUpdateskillsInput | string[]
+  activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
+  additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
+  certificates?: Prisma.StudentCertificateUpdateManyWithoutOrderNestedInput
+  research?: Prisma.StudentResearchUpdateManyWithoutOrderNestedInput
+}
+
+export type StudentOrderUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderCode?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationStartDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationEndDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skills?: Prisma.StudentOrderUpdateskillsInput | string[]
+  activities?: Prisma.StudentOrderUpdateactivitiesInput | string[]
+  additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
+  certificates?: Prisma.StudentCertificateUncheckedUpdateManyWithoutOrderNestedInput
+  research?: Prisma.StudentResearchUncheckedUpdateManyWithoutOrderNestedInput
+}
+
 export type StudentOrderCreateWithoutAwardsInput = {
   id?: string
   orderCode: string
@@ -799,6 +952,7 @@ export type StudentOrderCreateWithoutAwardsInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectCreateNestedManyWithoutOrderInput
   certificates?: Prisma.StudentCertificateCreateNestedManyWithoutOrderInput
   research?: Prisma.StudentResearchCreateNestedManyWithoutOrderInput
 }
@@ -827,6 +981,7 @@ export type StudentOrderUncheckedCreateWithoutAwardsInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectUncheckedCreateNestedManyWithoutOrderInput
   certificates?: Prisma.StudentCertificateUncheckedCreateNestedManyWithoutOrderInput
   research?: Prisma.StudentResearchUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -871,6 +1026,7 @@ export type StudentOrderUpdateWithoutAwardsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUpdateManyWithoutOrderNestedInput
   certificates?: Prisma.StudentCertificateUpdateManyWithoutOrderNestedInput
   research?: Prisma.StudentResearchUpdateManyWithoutOrderNestedInput
 }
@@ -899,6 +1055,7 @@ export type StudentOrderUncheckedUpdateWithoutAwardsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUncheckedUpdateManyWithoutOrderNestedInput
   certificates?: Prisma.StudentCertificateUncheckedUpdateManyWithoutOrderNestedInput
   research?: Prisma.StudentResearchUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -927,6 +1084,7 @@ export type StudentOrderCreateWithoutCertificatesInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectCreateNestedManyWithoutOrderInput
   awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
   research?: Prisma.StudentResearchCreateNestedManyWithoutOrderInput
 }
@@ -955,6 +1113,7 @@ export type StudentOrderUncheckedCreateWithoutCertificatesInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectUncheckedCreateNestedManyWithoutOrderInput
   awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
   research?: Prisma.StudentResearchUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -999,6 +1158,7 @@ export type StudentOrderUpdateWithoutCertificatesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUpdateManyWithoutOrderNestedInput
   awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
   research?: Prisma.StudentResearchUpdateManyWithoutOrderNestedInput
 }
@@ -1027,6 +1187,7 @@ export type StudentOrderUncheckedUpdateWithoutCertificatesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUncheckedUpdateManyWithoutOrderNestedInput
   awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
   research?: Prisma.StudentResearchUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -1055,6 +1216,7 @@ export type StudentOrderCreateWithoutResearchInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectCreateNestedManyWithoutOrderInput
   awards?: Prisma.StudentAwardCreateNestedManyWithoutOrderInput
   certificates?: Prisma.StudentCertificateCreateNestedManyWithoutOrderInput
 }
@@ -1083,6 +1245,7 @@ export type StudentOrderUncheckedCreateWithoutResearchInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.StudentProjectUncheckedCreateNestedManyWithoutOrderInput
   awards?: Prisma.StudentAwardUncheckedCreateNestedManyWithoutOrderInput
   certificates?: Prisma.StudentCertificateUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -1127,6 +1290,7 @@ export type StudentOrderUpdateWithoutResearchInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUpdateManyWithoutOrderNestedInput
   awards?: Prisma.StudentAwardUpdateManyWithoutOrderNestedInput
   certificates?: Prisma.StudentCertificateUpdateManyWithoutOrderNestedInput
 }
@@ -1155,6 +1319,7 @@ export type StudentOrderUncheckedUpdateWithoutResearchInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.StudentProjectUncheckedUpdateManyWithoutOrderNestedInput
   awards?: Prisma.StudentAwardUncheckedUpdateManyWithoutOrderNestedInput
   certificates?: Prisma.StudentCertificateUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -1165,12 +1330,14 @@ export type StudentOrderUncheckedUpdateWithoutResearchInput = {
  */
 
 export type StudentOrderCountOutputType = {
+  projects: number
   awards: number
   certificates: number
   research: number
 }
 
 export type StudentOrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | StudentOrderCountOutputTypeCountProjectsArgs
   awards?: boolean | StudentOrderCountOutputTypeCountAwardsArgs
   certificates?: boolean | StudentOrderCountOutputTypeCountCertificatesArgs
   research?: boolean | StudentOrderCountOutputTypeCountResearchArgs
@@ -1184,6 +1351,13 @@ export type StudentOrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
    * Select specific fields to fetch from the StudentOrderCountOutputType
    */
   select?: Prisma.StudentOrderCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * StudentOrderCountOutputType without action
+ */
+export type StudentOrderCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StudentProjectWhereInput
 }
 
 /**
@@ -1232,6 +1406,7 @@ export type StudentOrderSelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  projects?: boolean | Prisma.StudentOrder$projectsArgs<ExtArgs>
   awards?: boolean | Prisma.StudentOrder$awardsArgs<ExtArgs>
   certificates?: boolean | Prisma.StudentOrder$certificatesArgs<ExtArgs>
   research?: boolean | Prisma.StudentOrder$researchArgs<ExtArgs>
@@ -1318,6 +1493,7 @@ export type StudentOrderSelectScalar = {
 
 export type StudentOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderCode" | "fullName" | "profileImage" | "address" | "email" | "phone" | "githubUrl" | "linkedinUrl" | "degree" | "institution" | "educationStartDate" | "educationEndDate" | "company" | "position" | "duration" | "experienceDescription" | "skills" | "activities" | "additionalNotes" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["studentOrder"]>
 export type StudentOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | Prisma.StudentOrder$projectsArgs<ExtArgs>
   awards?: boolean | Prisma.StudentOrder$awardsArgs<ExtArgs>
   certificates?: boolean | Prisma.StudentOrder$certificatesArgs<ExtArgs>
   research?: boolean | Prisma.StudentOrder$researchArgs<ExtArgs>
@@ -1329,6 +1505,7 @@ export type StudentOrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type $StudentOrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "StudentOrder"
   objects: {
+    projects: Prisma.$StudentProjectPayload<ExtArgs>[]
     awards: Prisma.$StudentAwardPayload<ExtArgs>[]
     certificates: Prisma.$StudentCertificatePayload<ExtArgs>[]
     research: Prisma.$StudentResearchPayload<ExtArgs>[]
@@ -1751,6 +1928,7 @@ readonly fields: StudentOrderFieldRefs;
  */
 export interface Prisma__StudentOrderClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  projects<T extends Prisma.StudentOrder$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentOrder$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   awards<T extends Prisma.StudentOrder$awardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentOrder$awardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentAwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   certificates<T extends Prisma.StudentOrder$certificatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentOrder$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   research<T extends Prisma.StudentOrder$researchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentOrder$researchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentResearchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2196,6 +2374,30 @@ export type StudentOrderDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many StudentOrders to delete.
    */
   limit?: number
+}
+
+/**
+ * StudentOrder.projects
+ */
+export type StudentOrder$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StudentProject
+   */
+  select?: Prisma.StudentProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StudentProject
+   */
+  omit?: Prisma.StudentProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudentProjectInclude<ExtArgs> | null
+  where?: Prisma.StudentProjectWhereInput
+  orderBy?: Prisma.StudentProjectOrderByWithRelationInput | Prisma.StudentProjectOrderByWithRelationInput[]
+  cursor?: Prisma.StudentProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StudentProjectScalarFieldEnum | Prisma.StudentProjectScalarFieldEnum[]
 }
 
 /**

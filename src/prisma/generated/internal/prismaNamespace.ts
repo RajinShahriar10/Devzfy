@@ -393,6 +393,7 @@ export const ModelName = {
   Testimonial: 'Testimonial',
   Technology: 'Technology',
   StudentOrder: 'StudentOrder',
+  StudentProject: 'StudentProject',
   StudentAward: 'StudentAward',
   StudentCertificate: 'StudentCertificate',
   StudentResearch: 'StudentResearch',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "project" | "service" | "blogPost" | "contactMessage" | "siteSetting" | "testimonial" | "technology" | "studentOrder" | "studentAward" | "studentCertificate" | "studentResearch" | "businessOrder" | "heroContent" | "sEOSettings"
+    modelProps: "user" | "project" | "service" | "blogPost" | "contactMessage" | "siteSetting" | "testimonial" | "technology" | "studentOrder" | "studentProject" | "studentAward" | "studentCertificate" | "studentResearch" | "businessOrder" | "heroContent" | "sEOSettings"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1084,6 +1085,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StudentProject: {
+      payload: Prisma.$StudentProjectPayload<ExtArgs>
+      fields: Prisma.StudentProjectFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudentProjectFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudentProjectFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>
+        }
+        findFirst: {
+          args: Prisma.StudentProjectFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudentProjectFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>
+        }
+        findMany: {
+          args: Prisma.StudentProjectFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>[]
+        }
+        create: {
+          args: Prisma.StudentProjectCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>
+        }
+        createMany: {
+          args: Prisma.StudentProjectCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudentProjectCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>[]
+        }
+        delete: {
+          args: Prisma.StudentProjectDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>
+        }
+        update: {
+          args: Prisma.StudentProjectUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudentProjectDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudentProjectUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudentProjectUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudentProjectUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentProjectPayload>
+        }
+        aggregate: {
+          args: Prisma.StudentProjectAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudentProject>
+        }
+        groupBy: {
+          args: Prisma.StudentProjectGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentProjectGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudentProjectCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentProjectCountAggregateOutputType> | number
+        }
+      }
+    }
     StudentAward: {
       payload: Prisma.$StudentAwardPayload<ExtArgs>
       fields: Prisma.StudentAwardFieldRefs
@@ -1711,6 +1786,20 @@ export const StudentOrderScalarFieldEnum = {
 export type StudentOrderScalarFieldEnum = (typeof StudentOrderScalarFieldEnum)[keyof typeof StudentOrderScalarFieldEnum]
 
 
+export const StudentProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  techUsed: 'techUsed',
+  date: 'date',
+  liveUrl: 'liveUrl',
+  images: 'images',
+  orderId: 'orderId',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentProjectScalarFieldEnum = (typeof StudentProjectScalarFieldEnum)[keyof typeof StudentProjectScalarFieldEnum]
+
+
 export const StudentAwardScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2017,6 +2106,7 @@ export type GlobalOmitConfig = {
   testimonial?: Prisma.TestimonialOmit
   technology?: Prisma.TechnologyOmit
   studentOrder?: Prisma.StudentOrderOmit
+  studentProject?: Prisma.StudentProjectOmit
   studentAward?: Prisma.StudentAwardOmit
   studentCertificate?: Prisma.StudentCertificateOmit
   studentResearch?: Prisma.StudentResearchOmit
