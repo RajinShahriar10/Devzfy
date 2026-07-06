@@ -113,6 +113,41 @@ const techSvg: Record<string, React.ReactNode> = {
       <path d="M0 7.334v8h6.666v1.332H12v-1.332h12V7.334H0zm24 6.666H20v-4h-2v4h-3.334V8.666h9.334v5.334zM6.666 12H4v-2h2.666v2zm4 0H8v-2h2.666v2zm4 0h-2.666v-2h2.666v2z" />
     </svg>
   ),
+  cva: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+    </svg>
+  ),
+  clsx: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z" />
+    </svg>
+  ),
+  nextthemes: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6V6z" />
+    </svg>
+  ),
+  tailwindmerge: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+    </svg>
+  ),
+  bcryptjs: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+    </svg>
+  ),
+  eslint: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M12 2L1.5 7.5v9L12 22l10.5-5.5v-9L12 2zm0 2.77l7.5 3.92v7.62L12 20.23 4.5 16.31V8.69L12 4.77z" />
+    </svg>
+  ),
+  tsx: (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z" />
+    </svg>
+  ),
 };
 
 function getTechIcon(tech: Technology): React.ReactNode {

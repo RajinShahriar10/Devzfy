@@ -95,8 +95,10 @@ async function main() {
   }
 
   const techCount = await prisma.technology.count();
-  if (techCount === 0) {
-    await prisma.technology.createMany({
+  if (techCount > 0) {
+    await prisma.technology.deleteMany();
+  }
+  await prisma.technology.createMany({
       data: [
         { name: "HTML", icon: "html", category: "Language", order: 0 },
         { name: "CSS", icon: "css", category: "Styling", order: 1 },
@@ -118,10 +120,16 @@ async function main() {
         { name: "Zod", icon: "zod", category: "Validation", order: 17 },
         { name: "Git", icon: "git", category: "Version Control", order: 18 },
         { name: "npm", icon: "npm", category: "Package Manager", order: 19 },
+        { name: "CVA", icon: "cva", category: "Styling", order: 20 },
+        { name: "clsx", icon: "clsx", category: "Utility", order: 21 },
+        { name: "next-themes", icon: "nextthemes", category: "Theme", order: 22 },
+        { name: "tailwind-merge", icon: "tailwindmerge", category: "Utility", order: 23 },
+        { name: "bcryptjs", icon: "bcryptjs", category: "Security", order: 24 },
+        { name: "ESLint", icon: "eslint", category: "Linting", order: 25 },
+        { name: "tsx", icon: "tsx", category: "Runtime", order: 26 },
       ],
     });
     console.log("Technologies seeded.");
-  }
 
   console.log("Seeding complete!");
 }
