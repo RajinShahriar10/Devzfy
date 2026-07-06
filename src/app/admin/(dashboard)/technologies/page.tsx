@@ -181,7 +181,7 @@ export default function AdminTechnologies() {
                     id="field-name"
                     defaultValue={editing?.name || ""}
                     placeholder="e.g. React, Next.js, PostgreSQL"
-                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+                    className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
 
@@ -219,7 +219,7 @@ export default function AdminTechnologies() {
                     id="field-order"
                     type="number"
                     defaultValue={editing?.order ?? 0}
-                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+                    className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
 

@@ -13,10 +13,10 @@ const buttonVariants = cva(
         default:
           "bg-gradient-to-r from-[#7C3AED] to-[#2563EB] text-white hover:shadow-lg hover:shadow-purple-500/25 active:scale-95",
         secondary:
-          "bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/30",
+          "bg-muted text-foreground border border-border hover:bg-muted/80 hover:border-border",
         outline:
           "border border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500",
-        ghost: "text-foreground hover:bg-white/5",
+        ghost: "text-foreground hover:bg-muted",
         link: "text-primary underline-offset-4 hover:underline",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",

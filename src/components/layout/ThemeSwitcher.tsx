@@ -29,7 +29,7 @@ export function ThemeSwitcher() {
             "p-2 rounded-full transition-all duration-300",
             theme === value
               ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg"
-              : "text-gray-400 hover:text-white hover:bg-white/5"
+              : "text-gray-400 hover:text-foreground hover:bg-muted"
           )}
           aria-label={label}
         >

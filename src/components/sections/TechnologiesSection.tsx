@@ -201,7 +201,7 @@ export function TechnologiesSection({ technologies }: { technologies: Technology
                         {tech.name}
                       </h3>
                       {tech.category && (
-                        <span className="text-[10px] lg:text-xs text-gray-500 mt-1 px-2 py-0.5 rounded-full bg-white/5">
+                        <span className="text-[10px] lg:text-xs text-muted-foreground mt-1 px-2 py-0.5 rounded-full bg-muted">
                           {tech.category}
                         </span>
                       )}

@@ -47,7 +47,7 @@ export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<S
   });
 
   return (
-    <footer className="relative border-t border-white/10 bg-background">
+    <footer className="relative border-t border-border bg-background">
       <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -69,7 +69,7 @@ export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<S
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg glass text-gray-400 hover:text-white hover:border-purple-500/30 transition-all"
+                  className="p-2 rounded-lg glass text-gray-400 hover:text-foreground hover:border-purple-500/30 transition-all"
                   aria-label={label}
                 >
                   <Icon className="h-4 w-4" />
@@ -83,7 +83,7 @@ export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<S
             <ul className="space-y-3">
               {quickLinks.map(({ href, label }) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={href} className="text-sm text-gray-400 hover:text-foreground transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -96,7 +96,7 @@ export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<S
             <ul className="space-y-3">
               {supportLinks.map(({ href, label }) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={href} className="text-sm text-gray-400 hover:text-foreground transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -117,22 +117,22 @@ export function Footer({ settings = {} as SiteSettings }: { settings?: Partial<S
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400 flex items-center gap-1">
             &copy; {new Date().getFullYear()} Devzfy. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <div className="flex gap-6">
-              <Link href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
+              <Link href="/privacy" className="text-sm text-gray-400 hover:text-foreground transition-colors">
                 Privacy
               </Link>
-              <Link href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">
+              <Link href="/terms" className="text-sm text-gray-400 hover:text-foreground transition-colors">
                 Terms
               </Link>
             </div>
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-lg glass text-gray-400 hover:text-white hover:border-purple-500/30 transition-all"
+              className="p-2 rounded-lg glass text-gray-400 hover:text-foreground hover:border-purple-500/30 transition-all"
               aria-label="Back to top"
             >
               <ArrowUp className="h-4 w-4" />

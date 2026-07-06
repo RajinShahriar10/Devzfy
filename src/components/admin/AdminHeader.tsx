@@ -36,10 +36,10 @@ export function AdminHeader({ user }: { user: { name?: string | null; email?: st
 
   return (
     <>
-      <header className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-background/50 backdrop-blur-xl">
+      <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/50 backdrop-blur-xl">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden p-2 text-gray-400 hover:text-white"
+          className="lg:hidden p-2 text-gray-400 hover:text-foreground"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -61,7 +61,7 @@ export function AdminHeader({ user }: { user: { name?: string | null; email?: st
       </header>
 
       {mobileOpen && (
-        <div className="lg:hidden border-b border-white/10 bg-background/95 backdrop-blur-xl">
+        <div className="lg:hidden border-b border-border bg-background/95 backdrop-blur-xl">
           <nav className="px-3 py-2 space-y-1">
             {mobileLinks.map(({ href, label, icon: Icon }) => (
               <Link
@@ -72,7 +72,7 @@ export function AdminHeader({ user }: { user: { name?: string | null; email?: st
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all",
                   pathname === href
                     ? "bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-white"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                    : "text-gray-400 hover:text-foreground hover:bg-muted"
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -81,7 +81,7 @@ export function AdminHeader({ user }: { user: { name?: string | null; email?: st
             ))}
             <button
               onClick={() => signOut({ callbackUrl: "/admin/login" })}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-white/5 w-full"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 hover:text-foreground hover:bg-muted w-full"
             >
               <LogOut className="h-4 w-4" />
               Sign Out

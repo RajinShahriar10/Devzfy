@@ -60,7 +60,7 @@ export default function AdminSettings() {
             <Input
               value={settings.site_name || ""}
               onChange={(e) => update("site_name", e.target.value)}
-              className="bg-white/5 border-white/20 text-white"
+              className="bg-muted border-border text-foreground"
             />
           </div>
           <div>
@@ -68,7 +68,7 @@ export default function AdminSettings() {
             <Input
               value={settings.tagline || ""}
               onChange={(e) => update("tagline", e.target.value)}
-              className="bg-white/5 border-white/20 text-white"
+              className="bg-muted border-border text-foreground"
             />
           </div>
           <div>
@@ -76,7 +76,7 @@ export default function AdminSettings() {
             <Textarea
               value={settings.description || ""}
               onChange={(e) => update("description", e.target.value)}
-              className="bg-white/5 border-white/20 text-white"
+              className="bg-muted border-border text-foreground"
             />
           </div>
           <div>
@@ -85,7 +85,7 @@ export default function AdminSettings() {
               type="email"
               value={settings.contact_email || ""}
               onChange={(e) => update("contact_email", e.target.value)}
-              className="bg-white/5 border-white/20 text-white"
+              className="bg-muted border-border text-foreground"
             />
           </div>
 
@@ -96,7 +96,7 @@ export default function AdminSettings() {
               <Input
                 value={settings.facebook_url || ""}
                 onChange={(e) => update("facebook_url", e.target.value)}
-                className="bg-white/5 border-white/20 text-white"
+                className="bg-muted border-border text-foreground"
               />
             </div>
             <div>
@@ -104,7 +104,7 @@ export default function AdminSettings() {
               <Input
                 value={settings.linkedin_url || ""}
                 onChange={(e) => update("linkedin_url", e.target.value)}
-                className="bg-white/5 border-white/20 text-white"
+                className="bg-muted border-border text-foreground"
               />
             </div>
             <div>
@@ -112,7 +112,7 @@ export default function AdminSettings() {
               <Input
                 value={settings.twitter_url || ""}
                 onChange={(e) => update("twitter_url", e.target.value)}
-                className="bg-white/5 border-white/20 text-white"
+                className="bg-muted border-border text-foreground"
               />
             </div>
             <div>
@@ -120,7 +120,7 @@ export default function AdminSettings() {
               <Input
                 value={settings.github_url || ""}
                 onChange={(e) => update("github_url", e.target.value)}
-                className="bg-white/5 border-white/20 text-white"
+                className="bg-muted border-border text-foreground"
               />
             </div>
           </div>

@@ -178,7 +178,7 @@ export default function AdminTestimonials() {
                   </div>
                   <div className="flex-1">
                     <label className="text-sm text-gray-400 mb-1 block">Client Image</label>
-                    <Input type="file" accept="image/*" onChange={handleAvatarUpload} className="bg-white/5 border-white/20 text-white file:bg-purple-500/20 file:border-0 file:text-white file:rounded-lg file:px-3 file:py-1 file:text-sm" />
+                    <Input type="file" accept="image/*" onChange={handleAvatarUpload} className="bg-muted border-border text-foreground file:bg-purple-500/20 file:border-0 file:text-white file:rounded-lg file:px-3 file:py-1 file:text-sm" />
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ export default function AdminTestimonials() {
                     <Input
                       id="field-name"
                       defaultValue={editing?.name || ""}
-                      className="bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+                      className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div>
@@ -197,7 +197,7 @@ export default function AdminTestimonials() {
                       id="field-role"
                       defaultValue={editing?.role || ""}
                       placeholder="e.g. CEO, CTO"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+                      className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div>
@@ -205,7 +205,7 @@ export default function AdminTestimonials() {
                     <Input
                       id="field-company"
                       defaultValue={editing?.company || ""}
-                      className="bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+                      className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div>
@@ -229,7 +229,7 @@ export default function AdminTestimonials() {
                   <Textarea
                     id="field-content"
                     defaultValue={editing?.content || ""}
-                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 min-h-[100px]"
+                    className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[100px]"
                     placeholder="What the client said..."
                   />
                 </div>

@@ -146,7 +146,7 @@ export default function AdminStudentOrders() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name, email, or order code..."
-          className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+          className="pl-10 bg-muted border-border text-foreground placeholder:text-muted-foreground"
         />
       </div>
 

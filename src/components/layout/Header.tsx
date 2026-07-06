@@ -32,7 +32,7 @@ export function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-white/10"
+          ? "bg-background/80 backdrop-blur-xl border-b border-border"
           : "bg-transparent"
       )}
     >
@@ -52,7 +52,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className="px-4 py-2 text-sm text-gray-400 hover:text-foreground transition-colors rounded-lg hover:bg-muted"
               >
                 {link.label}
               </Link>
@@ -68,7 +68,7 @@ export function Header() {
             </Link>
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="lg:hidden p-2 text-gray-400 hover:text-white"
+              className="lg:hidden p-2 text-gray-400 hover:text-foreground"
             >
               {isMobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -82,7 +82,7 @@ export function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-t border-white/10 bg-background/95 backdrop-blur-xl"
+            className="lg:hidden border-t border-border bg-background/95 backdrop-blur-xl"
           >
             <nav className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
@@ -90,7 +90,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className="block px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                  className="block px-4 py-3 text-gray-400 hover:text-foreground hover:bg-muted rounded-lg transition-all"
                 >
                   {link.label}
                 </Link>

@@ -164,14 +164,14 @@ export function PortfolioSection({ projects }: { projects: Project[] }) {
 
             <button
               onClick={prev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full glass text-white hover:bg-white/20 transition-all z-10 hidden md:block"
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full glass text-foreground hover:bg-muted transition-all z-10 hidden md:block"
               aria-label="Previous project"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               onClick={next}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full glass text-white hover:bg-white/20 transition-all z-10 hidden md:block"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full glass text-foreground hover:bg-muted transition-all z-10 hidden md:block"
               aria-label="Next project"
             >
               <ChevronRight className="h-5 w-5" />
@@ -186,7 +186,7 @@ export function PortfolioSection({ projects }: { projects: Project[] }) {
                 className={`h-2 rounded-full transition-all duration-300 ${
                   i === current
                     ? "w-8 bg-gradient-to-r from-purple-500 to-blue-500"
-                    : "w-2 bg-white/20 hover:bg-white/40"
+                    : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                 }`}
                 aria-label={`Go to project ${i + 1}`}
               />
@@ -196,7 +196,7 @@ export function PortfolioSection({ projects }: { projects: Project[] }) {
           <div className="flex items-center justify-center gap-4 mt-8 md:hidden">
             <button
               onClick={prev}
-              className="p-2 rounded-full glass text-white hover:bg-white/20 transition-all"
+              className="p-2 rounded-full glass text-foreground hover:bg-muted transition-all"
               aria-label="Previous project"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -206,7 +206,7 @@ export function PortfolioSection({ projects }: { projects: Project[] }) {
             </span>
             <button
               onClick={next}
-              className="p-2 rounded-full glass text-white hover:bg-white/20 transition-all"
+              className="p-2 rounded-full glass text-foreground hover:bg-muted transition-all"
               aria-label="Next project"
             >
               <ChevronRight className="h-5 w-5" />

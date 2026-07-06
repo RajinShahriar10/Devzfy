@@ -105,13 +105,13 @@ export function TestimonialsSection({ testimonials }: { testimonials: Testimonia
             <>
               <button
                 onClick={prev}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-6 p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-6 p-2 text-gray-400 hover:text-foreground hover:bg-muted rounded-full transition-all"
               >
                 <ChevronLeft className="h-6 w-6" />
               </button>
               <button
                 onClick={next}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-6 p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-6 p-2 text-gray-400 hover:text-foreground hover:bg-muted rounded-full transition-all"
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
@@ -124,7 +124,7 @@ export function TestimonialsSection({ testimonials }: { testimonials: Testimonia
                     className={`h-2 rounded-full transition-all ${
                       i === current
                         ? "w-8 bg-gradient-to-r from-purple-500 to-blue-500"
-                        : "w-2 bg-white/20 hover:bg-white/40"
+                        : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                     }`}
                   />
                 ))}

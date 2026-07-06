@@ -66,7 +66,7 @@ export default function Contact() {
     }
   }
 
-  const inputClass = "bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:ring-purple-500/50 focus:border-purple-500";
+  const inputClass = "bg-muted border-border text-foreground placeholder:text-muted-foreground focus:ring-purple-500/50 focus:border-purple-500";
 
   const socialButtons = [
     {
@@ -178,7 +178,7 @@ export default function Contact() {
                   rel="noopener noreferrer"
                   className="block"
                 >
-                  <GlassCard className="group cursor-pointer hover:border-white/30 transition-all">
+                  <GlassCard className="group cursor-pointer hover:border-border transition-all">
                     <div className="flex items-center gap-4">
                       <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${btn.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
                         <btn.icon className="h-5 w-5 text-white" />
